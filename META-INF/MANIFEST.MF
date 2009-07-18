@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JDepend4Eclipse
+Bundle-SymbolicName: de.loskutov.eclipse.jdepend; singleton:=true
+Bundle-Version: 1.2.1
+Bundle-ClassPath: .
+Bundle-Activator: de.loskutov.eclipse.jdepend.JDepend4EclipsePlugin
+Bundle-Vendor: Andrei Loskutov
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui,
+ org.eclipse.jdt.core,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.ui,
+ org.eclipse.swt,
+ org.eclipse.jface,
+ org.eclipse.help,
+ org.eclipse.ui.console,
+ org.eclipse.ui.ide
+Eclipse-AutoStart: true
+Export-Package: jdepend.framework,
+ jdepend.textui,
+ jdepend.xmlui

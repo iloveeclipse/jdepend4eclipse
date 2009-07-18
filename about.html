@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>JDepend plugin for Eclipse: JDepend4Eclipse</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="author" content="Andrei Loskutov" />
+<meta name="copyright" content="Copyright 2003 - 2006 Andrei Loskutov" />
+<meta name="description" content="JDepend4Eclipse plugin for Eclipse is a wrapper for running JDepend from within Eclipse, written by Andrei Loskutov" />
+<meta name="keywords" content="Java, Eclipse, free, Plugin, JDepend, JDepend4Eclipse, Tool, Programmer, Loskutov" />
+<meta name="revisit-after" content="3 Days" />
+<meta name="robots" content="index, follow" />
+<meta name="distribution" content="global" />
+<meta name="rating" content="General" />
+<meta name="audience" content="All" />
+<link rel="stylesheet" href="doc/styles.css" type="text/css" />
+<link rel="SHORTCUT ICON" href="../favicon.ico" />
+</head>
+<body>
+<table width="86%" border="0" align="center" cellpadding="8" cellspacing="0" class="mainTable">
+  <tr>
+    <td> <a href="http://andrei.gmxhome.de/index.html" class="box">Home</a> | <a href="http://andrei.gmxhome.de/perforce/index.html" class="box">BranchView</a> | <a href="http://andrei.gmxhome.de/eclipse.html" class="box">Eclipse
+        plugins</a> <strong>-&gt;</strong> <span class="menu">JDepend4Eclipse</span></td>
+    <td align="right">| <a href="http://andrei.gmxhome.de/privat.html" class="box">About</a></td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" align="center" cellpadding="20" cellspacing="0" class="mainTable">
+  <tr>
+    <td>
+	
+		<h1>JDepend  plugin for Eclipse: JDepend4Eclipse</h1>
+<blockquote>
+    <p> JDepend4Eclipse plugin for <a href="http://www.eclipse.org/">Eclipse</a> is a wrapper for running
+        <a href="http://www.clarkware.com/software/JDepend.html"> JDepend</a> from within Eclipse. </p>
+    <p>- What is JDepend? (from <a href="http://www.clarkware.com/software/JDepend.html">www.clarkware.com</a>):</p>
+    <blockquote>
+        <p><cite>JDepend traverses Java class file directories and generates design quality  metrics for each Java package. JDepend allows you to automatically measure the  quality of a design in terms of its extensibility, reusability, and  maintainability to manage package dependencies effectively. </cite></p>
+    </blockquote>
+    <p>Here you can see <a href="http://andrei.gmxhome.de/jdepend4eclipse/examples.html" class="box">some examples</a></p>
+    <p>Advanced JDepend documantation are available as online help in Eclipse (press F1 key) or on <a href="http://www.clarkware.com/software/JDepend.html">the JDepend
+        creator's site</a> (please do not ask me what JDepend metrics are - ask
+        <a href="http://www.clarkware.com/software/JDepend.html">Mike</a>:) </p>
+    <p>This programm is free, see <a href="copyright.html">copyright</a>. </p>
+</blockquote>
+<p class="titel">JDepend integration</p>
+<blockquote>
+    <p>JDepend4Eclipse uses JDepend version 2.9.1. This tool is also free and is included to
+        <a href="links.html">JDepend4Eclipse destribution</a>. Please visit <a href="http://www.clarkware.com/software/JDepend.html">http://www.clarkware.com/software/JDepend.html
+        </a>to obtain latest information about JDepend.</p>
+</blockquote>
+<p class="titel">Download</p>
+<blockquote>
+  <p><a href="http://andrei.gmxhome.de/jdepend4eclipse/links.html" class="box">Here</a></p>
+</blockquote>
+<p class="titel">Installation</p>
+<blockquote>
+    <p>For 3.1+: </p>
+    <blockquote>
+      <p>All what you need to install JDepend4Eclipse plugin is to <strong>copy</strong> the
+          downloaded <strong>jar</strong> file into you <span class="code">%Eclipse%/plugin</span> directory
+          and restart Eclipse. You don't need to do anymore to install JDepend4Eclipse. <strong>Do
+          not unzip the downloaded jar file!</strong> </p>
+      <p>For Eclipse 3.1 Update Manager users: you can use special Eclipse update
+          site for this plugin. Go to &quot;Help -&gt; Software Updates -&gt; Find
+          and Install... -&gt; Search for new features to install -&gt; Next -&gt; New
+          Remote Site...&quot; and use the <strong>http://andrei.gmxhome.de/eclipse/</strong> as
+          url. </p>
+    </blockquote>
+    <p><span class="red">Note</span>: JDepend4Eclipse tested and works on Eclipse <span class="titel"> 3.1 and 3.2 </span> </p>
+</blockquote>
+<p class="titel">Usage</p>
+<blockquote>
+    <p>You can right click on any folder(s)/package(s) with Java resources in a Eclipse tree
+        view of current project, and then select <span class="code">&quot;JDepend/Show JDepend view&quot;</span>.
+        JDepend4Eclipse Perspective will be opened. This works on multiple selection or on binary projects
+        too. Voila!</p>
+    <p><span class="red">Note</span>: this is only one way to start JDepend4Eclipse.
+          Opening view from &quot;<span class="code">Window/Open Perspective/Other.../JDepend</span>&quot; make
+          no sense.</p>
+    <p><span class="red">Note</span>: If you missing some packages in a JDepend Perspective, please check &quot;<span class="code">Window/Preferences/Java/JDepend/Package
+        filters</span>&quot; for them.</p>
+</blockquote>
+<p class="titel">Feedback</p>
+<blockquote>
+    <p>Please send comments to Loskutov&nbsp;&#64;&nbsp;gmx&nbsp;.&nbsp;de</p>
+</blockquote>
+<p class="titel">History</p>
+<blockquote>
+  <p class="red">New in version 1.1.0 (for Eclipse 3.1 and 3.2) </p>
+  <blockquote>
+    <p>1) Integrated JDepend documentation, available now from Help menu and by pressing &lt;F1&gt; key</p>
+    <p>2) Updated included JDepend classes to the latest version (2.9.1) </p>
+    <p>3) Fixed values display for values smaller then 0.1 in the tables (thanks to Quenio dos Santos for bug report) and some other small fixes </p>
+    <p>4) Discontinued support for Eclipse 2.* and 3.0  </p>
+  </blockquote>
+  <p><span class="red">Here you can see <a href="http://andrei.gmxhome.de/jdepend4eclipse/history.html" class="box">older
+      versions history </a></span></p>
+  <blockquote>&nbsp;</blockquote>
+</blockquote>
+</td>
+</tr>
+</table>
+
+<p align="center"><i><small>Last changed at:
+      <!-- #BeginDate format:Br1m -->03.07.06  18:11<!-- #EndDate -->
+</small></i></p>
+</body>
+</html>

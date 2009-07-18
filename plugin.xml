@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+     <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="JDepend"
+            icon="icons/packages.gif"
+            class="de.loskutov.eclipse.jdepend.ui.JDependPerspectiveFactory"
+            id="de.loskutov.eclipse.jdepend.ui.JDependPerspective">
+      </perspective>
+   </extension>
+
+  <extension point="org.eclipse.core.runtime.preferences">
+    <initializer class="de.loskutov.eclipse.jdepend.preferences.JDependPreferenceInitializer"/>
+  </extension>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFolder"
+            adaptable="true"
+            nameFilter="*"
+            id="de.loskutov.eclipse.jdepend.contribution1">
+         <action
+               label="Run JDepend analysis"
+               class="de.loskutov.eclipse.jdepend.actions.ShowDependencyAction"
+               menubarPath="additions"
+               id="de.loskutov.eclipse.jdepend.ShowDependencyAction">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="JDepend"
+            category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage"
+            class="de.loskutov.eclipse.jdepend.preferences.JDependPreferencePage"
+            id="de.loskutov.eclipse.jdepend.preferences.JDependPreferencePage">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="JDepend"
+            id="de.loskutov.eclipse.jdepend">
+      </category>
+      <view
+            name="Packages"
+            icon="icons/packages.gif"
+            category="de.loskutov.eclipse.jdepend"
+            class="de.loskutov.eclipse.jdepend.views.PackageTreeView"
+            id="de.loskutov.eclipse.jdepend.views.PackageTreeView">
+      </view>
+      <view
+            name="Dependencies"
+            icon="icons/packages.gif"
+            category="de.loskutov.eclipse.jdepend"
+            class="de.loskutov.eclipse.jdepend.views.DependencyView"
+            id="de.loskutov.eclipse.jdepend.views.DependencyView">
+      </view>
+      <view
+            name="Metrics"
+            icon="icons/packages.gif"
+            category="de.loskutov.eclipse.jdepend"
+            class="de.loskutov.eclipse.jdepend.views.MetricsView"
+            id="de.loskutov.eclipse.jdepend.views.MetricsView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="doc/toc.xml"
+            primary="true"/>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts file="doc/contexts_JDepend4Eclipse.xml"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.console.consoleFactories">
+      <consoleFactory
+            class="de.loskutov.eclipse.jdepend.views.JDependConsole$JDependConsoleFactory"
+            icon="icons/packages.gif"
+            label="JDepend console"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.console.consolePageParticipants">
+      <consolePageParticipant
+            class="de.loskutov.eclipse.jdepend.views.JDependConsole$JDependConsolePageParticipant"
+            id="JDepend4Eclipse.consolePageParticipant">
+         <enablement>
+            <instanceof value="de.loskutov.eclipse.jdepend.views.JDependConsole"/>
+         </enablement>
+      </consolePageParticipant>
+   </extension>
+
+   <!-- seemst to be a problem with defining some of parts below in Java code directly -->
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <!-- see JavaUI, IPageLayout & IConsoleConstants -->
+      <perspectiveExtension targetID="de.loskutov.eclipse.jdepend.ui.JDependPerspective">
+         <showInPart id="org.eclipse.ui.views.ResourceNavigator"/>
+         <showInPart id="org.eclipse.jdt.ui.PackageExplorer"/>
+
+         <actionSet id="org.eclipse.jdt.ui.JavaActionSet"/>
+         <actionSet id="org.eclipse.jdt.ui.SearchActionSet"/>
+         <actionSet id="org.eclipse.jdt.ui.A_OpenActionSet"/>
+
+         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaPerspective"/>
+         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaHierarchyPerspective"/>
+         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaBrowsingPerspective"/>
+
+         <viewShortcut id="de.loskutov.eclipse.jdepend.views.DependencyView"/>
+         <viewShortcut id="de.loskutov.eclipse.jdepend.views.PackageTreeView"/>
+         <viewShortcut id="de.loskutov.eclipse.jdepend.views.MetricsView"/>
+         <viewShortcut id="org.eclipse.ui.console.ConsoleView"/>
+         <viewShortcut id="org.eclipse.jdt.ui.PackageExplorer"/>
+         <viewShortcut id="org.eclipse.ui.views.ResourceNavigator"/>
+      </perspectiveExtension>
+   </extension>
+</plugin>
