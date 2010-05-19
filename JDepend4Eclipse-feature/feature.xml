@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="JDepend4Eclipse"
+      label="JDepend4Eclipse"
+      version="1.2.1"
+      provider-name="Andrei Loskutov"
+      plugin="de.loskutov.eclipse.jdepend"
+      image="loskutov32.gif">
+
+   <description url="http://andrei.gmxhome.de/jdepend4eclipse/index.html">
+      JDepend4Eclipse plugin for Eclipse is a wrapper for running JDepend
+from within Eclipse.
+   </description>
+
+   <copyright url="http://andrei.gmxhome.de/jdepend4eclipse/copyright.html">
+      Copyright (c) 2002 - 2010 by Andrei Loskutov &lt;Loskutov@gmx.de&gt;. All rights reserved.
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+       Copyright (c) 2002 - 2010 Andrei Loskutov, licensed under the Eclipse Public License 1.0.
+   </license>
+
+   <url>
+      <update label="Andrei Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
+      <discovery label="Andrei Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime" version="3.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.help"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.ui.ide"/>
+   </requires>
+
+   <plugin
+         id="de.loskutov.eclipse.jdepend"
+         download-size="300"
+         install-size="300"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
