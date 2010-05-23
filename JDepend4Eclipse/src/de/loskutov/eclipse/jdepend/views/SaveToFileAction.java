@@ -5,6 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * Contributor:  Andrei Loskutov - initial API and implementation
+ *               Jens Cornelis - SAVE_AS dialog bug fix
  *******************************************************************************/
 package de.loskutov.eclipse.jdepend.views;
 
@@ -31,6 +32,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
@@ -242,7 +244,7 @@ public class SaveToFileAction extends Action {
     }
 
     private File getFileFromUser(boolean asXml) {
-        FileDialog fd = new FileDialog(getShell());
+        FileDialog fd = new FileDialog(getShell(), SWT.SAVE);
         if (lastUsedFile == null) {
             String property = System.getProperty("user.home");
             fd.setFilterPath(property);
