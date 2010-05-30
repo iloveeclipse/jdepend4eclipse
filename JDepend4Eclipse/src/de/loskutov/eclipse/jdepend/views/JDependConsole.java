@@ -8,13 +8,13 @@
  *******************************************************************************/
 package de.loskutov.eclipse.jdepend.views;
 
+import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
@@ -51,7 +51,7 @@ public class JDependConsole extends MessageConsole {
         public ToggleXmlAction() {
             super("Toggle text/XML output mode", IAction.AS_CHECK_BOX);
             setImageDescriptor(JDepend4EclipsePlugin.getDefault()
-            .getImageDescriptor("asXml.gif"));
+                    .getImageDescriptor("asXml.gif"));
             setChecked(JDepend4EclipsePlugin.getDefault()
                     .getPreferenceStore().getBoolean(JDependConstants.PREF_OUTPUT_XML));
 
@@ -126,7 +126,7 @@ public class JDependConsole extends MessageConsole {
     public static void showConsole(final List packages1) {
         JDependConsole.packages = packages1;
         if(packages == null || JDepend4EclipsePlugin.getDefault().getPreferenceStore()
-                    .getBoolean(JDependConstants.PREF_OUTPUT_NIX)){
+                .getBoolean(JDependConstants.PREF_OUTPUT_NIX)){
             return;
         }
 
@@ -136,7 +136,7 @@ public class JDependConsole extends MessageConsole {
         Job job = new Job("JDepend text output processing"){
             protected IStatus run(IProgressMonitor monitor) {
                 IOConsoleOutputStream stream = cons.newMessageStream();
-                PrintWriter pw = new PrintWriter(stream);
+                PrintWriter pw = new PrintWriter(new BufferedWriter(new PrintWriter(stream)));
                 boolean asXml = JDepend4EclipsePlugin.getDefault().getPreferenceStore()
                 .getBoolean(JDependConstants.PREF_OUTPUT_XML);
                 jdepend.textui.JDepend jdep;
@@ -156,9 +156,11 @@ public class JDependConsole extends MessageConsole {
                 jdep.analyze();
                 return monitor.isCanceled()?  Status.CANCEL_STATUS : Status.OK_STATUS;
             }
+            public boolean belongsTo(Object family) {
+                return JDependConsole.class == family;
+            }
         };
-        Platform.getJobManager().cancel(console);
-        job.setRule(cons.getSchedulingRule());
+        Job.getJobManager().cancel(JDependConsole.class);
         job.schedule();
     }
 
@@ -180,10 +182,10 @@ public class JDependConsole extends MessageConsole {
             removeAction = null;
             xmlAction = null;
             // followed causes sometimes problems with console removal
-//            if (console != null) {
-//                console.dispose();
-//                console = null;
-//            }
+            //            if (console != null) {
+            //                console.dispose();
+            //                console = null;
+            //            }
         }
 
         public void init(IPageBookViewPage page, IConsole console1) {
