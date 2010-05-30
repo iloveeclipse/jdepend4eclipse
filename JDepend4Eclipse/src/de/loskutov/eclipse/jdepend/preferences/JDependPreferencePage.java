@@ -68,9 +68,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -78,7 +81,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-import org.eclipse.ui.model.WorkbenchViewerSorter;
+import org.eclipse.ui.model.WorkbenchViewerComparator;
 
 import de.loskutov.eclipse.jdepend.JDepend4EclipsePlugin;
 import de.loskutov.eclipse.jdepend.JDependConstants;
@@ -117,24 +120,43 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         setDescription(JDepend4EclipsePlugin.getResourceString("JDependPreferencePage.Options_for_JDepend")); //$NON-NLS-1$
     }
 
-    protected Control createContents(Composite parent) {
-        //WorkbenchHelp.setHelp(getControl(), IJavaDebugHelpContextIds.JAVA_STEP_FILTER_PREFERENCE_PAGE);
-
-        //The main composite
-        Composite composite = new Composite(parent, SWT.NULL);
+    protected static Composite createContainer(Composite parent) {
+        Composite composite = new Composite(parent, SWT.NONE);
         GridLayout layout = new GridLayout();
-        layout.numColumns = 1;
-        layout.marginHeight = 0;
         layout.marginWidth = 0;
+        layout.marginHeight = 0;
         composite.setLayout(layout);
-        GridData data = new GridData();
-        data.verticalAlignment = GridData.FILL;
-        data.horizontalAlignment = GridData.FILL;
-        composite.setLayoutData(data);
-
-        createFilterPreferences(composite);
-
+        GridData gridData = new GridData(GridData.VERTICAL_ALIGN_FILL
+                | GridData.HORIZONTAL_ALIGN_FILL);
+        gridData.grabExcessHorizontalSpace = true;
+        composite.setLayoutData(gridData);
         return composite;
+    }
+
+    protected Control createContents(Composite parent) {
+        TabFolder tabFolder = new TabFolder(parent, SWT.TOP);
+        tabFolder.setLayout(new GridLayout(1, true));
+        tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+        TabItem tabFilter = new TabItem(tabFolder, SWT.NONE);
+        tabFilter.setText("Filters");
+
+        Group defPanel = new Group(tabFolder, SWT.NONE);
+        defPanel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        defPanel.setLayout(new GridLayout(1, false));
+        defPanel.setText("Search Filters");
+
+        tabFilter.setControl(defPanel);
+
+        TabItem support = new TabItem(tabFolder, SWT.NONE);
+        support.setText("Misc...");
+        Composite supportPanel = createContainer(tabFolder);
+        support.setControl(supportPanel);
+        SupportPanel.createSupportLinks(supportPanel);
+
+        createFilterPreferences(defPanel);
+
+        return tabFolder;
     }
 
     /**
@@ -208,8 +230,8 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
 
         fFilterTable =
             new Table(
-                container,
-                SWT.CHECK
+                    container,
+                    SWT.CHECK
                     | SWT.H_SCROLL
                     | SWT.V_SCROLL
                     | SWT.MULTI
@@ -230,7 +252,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         fFilterViewer = new CheckboxTableViewer(fFilterTable);
         fTableEditor = new TableEditor(fFilterTable);
         fFilterViewer.setLabelProvider(new FilterLabelProvider());
-        fFilterViewer.setSorter(new FilterViewerSorter());
+        fFilterViewer.setComparator(new FilterViewerSorter());
         fStepFilterContentProvider = new FilterContentProvider(fFilterViewer);
         fFilterViewer.setContentProvider(fStepFilterContentProvider);
         //@todo table width input just needs to be non-null
@@ -540,10 +562,10 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
      * workspace are considered.
      */
     public static ElementListSelectionDialog createAllPackagesDialog(
-        Shell shell,
-        IJavaProject[] originals,
-        final boolean includeDefaultPackage)
-        throws JavaModelException {
+            Shell shell,
+            IJavaProject[] originals,
+            final boolean includeDefaultPackage)
+    throws JavaModelException {
         final List packageList = new ArrayList();
         if (originals == null) {
             IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
@@ -642,17 +664,11 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
     public boolean performOk() {
         fStepFilterContentProvider.saveFilters();
         IPreferenceStore prefs = getPreferenceStore();
-        prefs.setValue(
-            JDependConstants.PREF_USE_ALL_CYCLES_SEARCH,
-            fUseAllCyclesSearchCheckbox.getSelection());
-        prefs.setValue(
-                JDependConstants.SAVE_AS_XML,
-                saveAsXml.getSelection());
-        prefs.setValue(
-                JDependConstants.SAVE_TO_SHOW_OPTIONS,
-                askBeforeSave.getSelection());
-        JDepend4EclipsePlugin.getDefault().savePluginPreferences();
-        return true;
+        prefs.setValue(JDependConstants.PREF_USE_ALL_CYCLES_SEARCH,
+                fUseAllCyclesSearchCheckbox.getSelection());
+        prefs.setValue(JDependConstants.SAVE_AS_XML, saveAsXml.getSelection());
+        prefs.setValue(JDependConstants.SAVE_TO_SHOW_OPTIONS, askBeforeSave.getSelection());
+        return super.performOk();
     }
 
     /**
@@ -717,7 +733,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
      */
     protected final class FilterContentProvider implements IStructuredContentProvider {
 
-        private CheckboxTableViewer fViewer;
+        private final CheckboxTableViewer fViewer;
         private List fFilters;
 
         public FilterContentProvider(CheckboxTableViewer viewer) {
@@ -775,7 +791,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         protected List createActiveStepFiltersList() {
             String[] strings =
                 parseList(
-                    getPreferenceStore().getString(JDependConstants.PREF_ACTIVE_FILTERS_LIST));
+                        getPreferenceStore().getString(JDependConstants.PREF_ACTIVE_FILTERS_LIST));
             return Arrays.asList(strings);
         }
 
@@ -787,8 +803,8 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         protected List createDefaultStepFiltersList() {
             String[] strings =
                 parseList(
-                    getPreferenceStore().getDefaultString(
-                        JDependConstants.PREF_ACTIVE_FILTERS_LIST));
+                        getPreferenceStore().getDefaultString(
+                                JDependConstants.PREF_ACTIVE_FILTERS_LIST));
             return Arrays.asList(strings);
         }
 
@@ -800,7 +816,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         protected List createInactiveStepFiltersList() {
             String[] strings =
                 parseList(
-                    getPreferenceStore().getString(JDependConstants.PREF_INACTIVE_FILTERS_LIST));
+                        getPreferenceStore().getString(JDependConstants.PREF_INACTIVE_FILTERS_LIST));
             return Arrays.asList(strings);
         }
 
@@ -818,8 +834,8 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         public void saveFilters() {
 
             getPreferenceStore().setValue(
-                JDependConstants.PREF_USE_FILTERS,
-                fUseFiltersCheckbox.getSelection());
+                    JDependConstants.PREF_USE_FILTERS,
+                    fUseFiltersCheckbox.getSelection());
 
             List active = new ArrayList(fFilters.size());
             List inactive = new ArrayList(fFilters.size());
@@ -945,7 +961,7 @@ class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
     }
 }
 
-class FilterViewerSorter extends WorkbenchViewerSorter {
+class FilterViewerSorter extends WorkbenchViewerComparator {
     public int compare(Viewer viewer, Object e1, Object e2) {
         ILabelProvider lprov = (ILabelProvider) ((ContentViewer) viewer).getLabelProvider();
         String name1 = lprov.getText(e1);
