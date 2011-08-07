@@ -23,8 +23,8 @@ import de.loskutov.eclipse.jdepend.JDepend4EclipsePlugin;
 
 public class TreeFolder extends TreeObject {
     protected boolean cycle;
-    private ArrayList children;
-    private ArrayList iJavaElements;
+    private final ArrayList children;
+    private final ArrayList iJavaElements;
     private final IJavaElement javaElement;
 
     public TreeFolder(IJavaElement javaElement) {
@@ -106,10 +106,12 @@ public class TreeFolder extends TreeObject {
     public boolean hasChildren() {
         return children.size() > 0;
     }
+    @Override
     public boolean isLeaf() {
         return false;
     }
 
+    @Override
     public boolean hasCycle(){
         if(cycle) {
             return cycle;
@@ -193,10 +195,12 @@ public class TreeFolder extends TreeObject {
         this.cycle = cycle;
     }
 
+    @Override
     public String getName() {
         return getPackageName();
     }
 
+    @Override
     public String getPackageName() {
         ArrayList elements = this.getIJavaElements();
         if(elements.size() == 0){

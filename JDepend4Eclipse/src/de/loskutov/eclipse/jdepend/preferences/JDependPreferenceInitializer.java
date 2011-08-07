@@ -23,6 +23,7 @@ public class JDependPreferenceInitializer extends AbstractPreferenceInitializer 
     /* (non-Javadoc)
      * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
      */
+    @Override
     public void initializeDefaultPreferences() {
         IPreferenceStore store = JDepend4EclipsePlugin.getDefault().getPreferenceStore();
         store.setDefault(JDependConstants.PREF_ACTIVE_FILTERS_LIST, "javax.*,java.*"); //$NON-NLS-1$

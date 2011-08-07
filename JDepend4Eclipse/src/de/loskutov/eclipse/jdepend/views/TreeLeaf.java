@@ -36,6 +36,7 @@ public class TreeLeaf extends TreeObject {
         this.iResource = iResource;
     }
 
+    @Override
     public String getName() {
         if(javaElement != null){
             return javaElement.getElementName();
@@ -43,6 +44,7 @@ public class TreeLeaf extends TreeObject {
         return iResource == null? "" : iResource.getName(); //$NON-NLS-1$
     }
 
+    @Override
     public boolean isLeaf() {
         return true;
     }
@@ -51,6 +53,7 @@ public class TreeLeaf extends TreeObject {
         return javaElement;
     }
 
+    @Override
     public IResource getIResource(){
         if(javaElement == null){
             return super.getIResource();
@@ -65,6 +68,7 @@ public class TreeLeaf extends TreeObject {
     /* (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object obj) {
         if(obj == this){
             return true;
@@ -80,10 +84,12 @@ public class TreeLeaf extends TreeObject {
     /* (non-Javadoc)
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return getName().hashCode();
     }
 
+    @Override
     public boolean hasCycle(){
         return false;
     }
@@ -91,6 +97,7 @@ public class TreeLeaf extends TreeObject {
     /* (non-Javadoc)
      * @see de.loskutov.eclipse.jdepend.views.TreeObject#getPackageName()
      */
+    @Override
     public String getPackageName() {
         if(getIJavaElement() != null){
             return getJavaPackageName(getIJavaElement());
@@ -113,8 +120,8 @@ public class TreeLeaf extends TreeObject {
             }
             StringBuffer sb = new StringBuffer(packagePath);
             sb.append(File.separator).append(
-                javaElement.getPath().removeFileExtension().lastSegment()).append(
-                ".class"); //$NON-NLS-1$
+                    javaElement.getPath().removeFileExtension().lastSegment()).append(
+                            ".class"); //$NON-NLS-1$
             filePath = sb.toString();
         } else {
             if(iResource != null){

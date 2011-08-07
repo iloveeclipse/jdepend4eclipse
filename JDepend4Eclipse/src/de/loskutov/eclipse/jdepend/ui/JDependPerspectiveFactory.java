@@ -42,16 +42,16 @@ public class JDependPerspectiveFactory implements IPerspectiveFactory {
         layout.setEditorAreaVisible(false);
 
         IFolderLayout top =
-            layout.createFolder("top", IPageLayout.TOP, 1f, editorArea);  //$NON-NLS-1$
+                layout.createFolder("top", IPageLayout.TOP, 1f, editorArea);  //$NON-NLS-1$
         top.addView(DependencyView.ID);
         top.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
 
         IFolderLayout bottom_left =
-            layout.createFolder("bottom_left", IPageLayout.LEFT, 0.3f, DependencyView.ID);  //$NON-NLS-1$
+                layout.createFolder("bottom_left", IPageLayout.LEFT, 0.3f, DependencyView.ID);  //$NON-NLS-1$
         bottom_left.addView(MetricsView.ID);
 
         IFolderLayout left =
-            layout.createFolder("left", IPageLayout.TOP, 0.7f, MetricsView.ID);    //$NON-NLS-1$
+                layout.createFolder("left", IPageLayout.TOP, 0.7f, MetricsView.ID);    //$NON-NLS-1$
         left.addView(PackageTreeView.ID);
     }
 

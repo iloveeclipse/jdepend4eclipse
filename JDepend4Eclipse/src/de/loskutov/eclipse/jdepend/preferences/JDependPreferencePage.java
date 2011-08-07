@@ -133,6 +133,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         return composite;
     }
 
+    @Override
     protected Control createContents(Composite parent) {
         TabFolder tabFolder = new TabFolder(parent, SWT.TOP);
         tabFolder.setLayout(new GridLayout(1, true));
@@ -229,14 +230,14 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         fTableLabel.setLayoutData(gd);
 
         fFilterTable =
-            new Table(
-                    container,
-                    SWT.CHECK
-                    | SWT.H_SCROLL
-                    | SWT.V_SCROLL
-                    | SWT.MULTI
-                    | SWT.FULL_SELECTION
-                    | SWT.BORDER);
+                new Table(
+                        container,
+                        SWT.CHECK
+                        | SWT.H_SCROLL
+                        | SWT.V_SCROLL
+                        | SWT.MULTI
+                        | SWT.FULL_SELECTION
+                        | SWT.BORDER);
         fFilterTable.setHeaderVisible(true);
         // fFilterTable.setLinesVisible(true);
         fFilterTable.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -380,11 +381,11 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         FontMetrics fontMetrics = gc.getFontMetrics();
         gc.dispose();
         int widthHint =
-            Dialog.convertHorizontalDLUsToPixels(fontMetrics, IDialogConstants.BUTTON_WIDTH);
+                Dialog.convertHorizontalDLUsToPixels(fontMetrics, IDialogConstants.BUTTON_WIDTH);
         gd.widthHint = Math.max(widthHint, button.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x);
 
         gd.heightHint =
-            Dialog.convertVerticalDLUsToPixels(fontMetrics, IDialogConstants.BUTTON_HEIGHT);
+                Dialog.convertVerticalDLUsToPixels(fontMetrics, IDialogConstants.BUTTON_HEIGHT);
         return gd;
     }
 
@@ -440,6 +441,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
     private void setEditorListeners(Text text) {
         // CR means commit the changes, ESC means abort and don't commit
         text.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyReleased(KeyEvent event) {
                 if (event.character == SWT.CR) {
                     if (fInvalidEditorText != null) {
@@ -456,6 +458,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         });
         // Consider loss of focus on the editor to mean the same as CR
         text.addFocusListener(new FocusAdapter() {
+            @Override
             public void focusLost(FocusEvent event) {
                 if (fInvalidEditorText != null) {
                     fEditorText.setText(fInvalidEditorText);
@@ -565,7 +568,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
             Shell shell,
             IJavaProject[] originals,
             final boolean includeDefaultPackage)
-    throws JavaModelException {
+                    throws JavaModelException {
         final List packageList = new ArrayList();
         if (originals == null) {
             IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
@@ -615,7 +618,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         }
         int flags = JavaElementLabelProvider.SHOW_DEFAULT;
         ElementListSelectionDialog dialog =
-            new ElementListSelectionDialog(shell, new JavaElementLabelProvider(flags));
+                new ElementListSelectionDialog(shell, new JavaElementLabelProvider(flags));
         dialog.setIgnoreCase(false);
         dialog.setElements(packageList.toArray()); // XXX inefficient
         return dialog;
@@ -661,6 +664,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         fStepFilterContentProvider.removeFilters(selection.toArray());
     }
 
+    @Override
     public boolean performOk() {
         fStepFilterContentProvider.saveFilters();
         IPreferenceStore prefs = getPreferenceStore();
@@ -675,6 +679,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
      * Sets the default preferences.
      * @see PreferencePage#performDefaults()
      */
+    @Override
     protected void performDefaults() {
         setDefaultValues();
         super.performDefaults();
@@ -753,17 +758,17 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
             populateFilters(active, inactive, defaultlist);
 
             boolean useStepFilters =
-                getPreferenceStore().getDefaultBoolean(JDependConstants.PREF_USE_FILTERS);
+                    getPreferenceStore().getDefaultBoolean(JDependConstants.PREF_USE_FILTERS);
             fUseFiltersCheckbox.setSelection(useStepFilters);
             toggleFilterWidgetsEnabled(useStepFilters);
             boolean useFastSearch =
-                getPreferenceStore().getDefaultBoolean(JDependConstants.PREF_USE_ALL_CYCLES_SEARCH);
+                    getPreferenceStore().getDefaultBoolean(JDependConstants.PREF_USE_ALL_CYCLES_SEARCH);
             fUseAllCyclesSearchCheckbox.setSelection(useFastSearch);
             boolean saveAsXmlValue =
-                getPreferenceStore().getDefaultBoolean(JDependConstants.SAVE_AS_XML);
+                    getPreferenceStore().getDefaultBoolean(JDependConstants.SAVE_AS_XML);
             saveAsXml.setSelection(saveAsXmlValue);
             boolean askBeforeValue =
-                getPreferenceStore().getDefaultBoolean(JDependConstants.SAVE_TO_SHOW_OPTIONS);
+                    getPreferenceStore().getDefaultBoolean(JDependConstants.SAVE_TO_SHOW_OPTIONS);
             askBeforeSave.setSelection(askBeforeValue);
             saveAsXml.setEnabled(!askBeforeValue);
         }
@@ -790,8 +795,8 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
          */
         protected List createActiveStepFiltersList() {
             String[] strings =
-                parseList(
-                        getPreferenceStore().getString(JDependConstants.PREF_ACTIVE_FILTERS_LIST));
+                    parseList(
+                            getPreferenceStore().getString(JDependConstants.PREF_ACTIVE_FILTERS_LIST));
             return Arrays.asList(strings);
         }
 
@@ -802,9 +807,9 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
          */
         protected List createDefaultStepFiltersList() {
             String[] strings =
-                parseList(
-                        getPreferenceStore().getDefaultString(
-                                JDependConstants.PREF_ACTIVE_FILTERS_LIST));
+                    parseList(
+                            getPreferenceStore().getDefaultString(
+                                    JDependConstants.PREF_ACTIVE_FILTERS_LIST));
             return Arrays.asList(strings);
         }
 
@@ -815,8 +820,8 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
          */
         protected List createInactiveStepFiltersList() {
             String[] strings =
-                parseList(
-                        getPreferenceStore().getString(JDependConstants.PREF_INACTIVE_FILTERS_LIST));
+                    parseList(
+                            getPreferenceStore().getString(JDependConstants.PREF_INACTIVE_FILTERS_LIST));
             return Arrays.asList(strings);
         }
 
@@ -913,6 +918,7 @@ final class Filter {
         fChecked = checked;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o instanceof Filter) {
             Filter other = (Filter) o;
@@ -923,6 +929,7 @@ final class Filter {
         return false;
     }
 
+    @Override
     public int hashCode() {
         return getName().hashCode();
     }
@@ -934,7 +941,7 @@ final class Filter {
 class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
 
     private static final Image IMG_PKG =
-        JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_PACKAGE);
+            JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_PACKAGE);
 
     /**
      * @see ITableLabelProvider#getColumnText(Object, int)
@@ -949,6 +956,7 @@ class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
     /**
      * @see ILabelProvider#getText(Object)
      */
+    @Override
     public String getText(Object element) {
         return ((Filter) element).getName();
     }
@@ -962,6 +970,7 @@ class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
 }
 
 class FilterViewerSorter extends WorkbenchViewerComparator {
+    @Override
     public int compare(Viewer viewer, Object e1, Object e2) {
         ILabelProvider lprov = (ILabelProvider) ((ContentViewer) viewer).getLabelProvider();
         String name1 = lprov.getText(e1);

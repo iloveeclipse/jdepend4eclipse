@@ -59,6 +59,7 @@ public class DependencyView extends ViewPart {
             this.column = column;
         }
 
+        @Override
         public int compare(Viewer viewer, Object e1, Object e2) {
             if(e1 instanceof String [] && e2 instanceof String []){
                 String[] strings1 = (String[]) e1;
@@ -101,17 +102,17 @@ public class DependencyView extends ViewPart {
 
     final static String[] columnHeaders =
         {
-            JDepend4EclipsePlugin.getResourceString("DependencyView.column_Package"),
-            JDepend4EclipsePlugin.getResourceString("DependencyView.column_CC"),
-            JDepend4EclipsePlugin.getResourceString("DependencyView.column_AC"),
-            JDepend4EclipsePlugin.getResourceString("DependencyView.column_Ca"),
-            JDepend4EclipsePlugin.getResourceString("DependencyView.column_Ce"),
-            JDepend4EclipsePlugin.getResourceString("DependencyView.A"), // abstractness
-            JDepend4EclipsePlugin.getResourceString("DependencyView.I"), // instability
-            JDepend4EclipsePlugin.getResourceString("DependencyView.D"), // distance
-            JDepend4EclipsePlugin.getResourceString("DependencyView.column_Cycle") };
+        JDepend4EclipsePlugin.getResourceString("DependencyView.column_Package"),
+        JDepend4EclipsePlugin.getResourceString("DependencyView.column_CC"),
+        JDepend4EclipsePlugin.getResourceString("DependencyView.column_AC"),
+        JDepend4EclipsePlugin.getResourceString("DependencyView.column_Ca"),
+        JDepend4EclipsePlugin.getResourceString("DependencyView.column_Ce"),
+        JDepend4EclipsePlugin.getResourceString("DependencyView.A"), // abstractness
+        JDepend4EclipsePlugin.getResourceString("DependencyView.I"), // instability
+        JDepend4EclipsePlugin.getResourceString("DependencyView.D"), // distance
+        JDepend4EclipsePlugin.getResourceString("DependencyView.column_Cycle") };
 
-    private ColumnLayoutData[] columnLayouts =
+    private final ColumnLayoutData[] columnLayouts =
         {
             new ColumnWeightData(50, true),
             new ColumnWeightData(10, true),
@@ -125,11 +126,11 @@ public class DependencyView extends ViewPart {
 
     /** The view's identifier */
     public static final String ID =
-        JDepend4EclipsePlugin.ID + ".views.DependencyView";
+            JDepend4EclipsePlugin.ID + ".views.DependencyView";
 
     static final class ViewLabelProvider
-        extends LabelProvider
-        implements ITableLabelProvider {
+    extends LabelProvider
+    implements ITableLabelProvider {
         public String getColumnText(Object obj, int index) {
             if(obj instanceof String[]){
                 String [] arr = (String[]) obj;
@@ -148,13 +149,14 @@ public class DependencyView extends ViewPart {
                 if(index < arr.length ){
                     if( "true".equalsIgnoreCase(arr[index])){
                         return //JavaUI.getSharedImages().getImage( ISharedImages.
-                            PlatformUI.getWorkbench().getSharedImages().getImage(
-                            org.eclipse.ui.ISharedImages.IMG_OBJS_WARN_TSK);
+                                PlatformUI.getWorkbench().getSharedImages().getImage(
+                                        org.eclipse.ui.ISharedImages.IMG_OBJS_WARN_TSK);
                     }
                 }
             }
             return index == 0? getImage(obj) : null;
         }
+        @Override
         public Image getImage(Object obj) {
             return JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_PACKAGE);
         }
@@ -199,26 +201,26 @@ public class DependencyView extends ViewPart {
                 String[] row = new String [columnHeaders.length];
                 for (int column = 0; column < row.length; column++) {
                     switch (column) {
-                        case FIRST_COLUMN : row[column] = "" + elements[elt].getName();
-                            break;
-                        case FIRST_COLUMN + 1 : row[column] = "" + elements[elt].getConcreteClassCount();
-                            break;
-                        case FIRST_COLUMN + 2 : row[column] = "" + elements[elt].getAbstractClassCount();
-                            break;
-                        case FIRST_COLUMN + 3 : row[column] = "" + elements[elt].afferentCoupling();
-                            break;
-                        case FIRST_COLUMN + 4 : row[column] = "" + elements[elt].efferentCoupling();
-                            break;
-                        case FIRST_COLUMN + 5 : row[column] = getShortFloat(elements[elt].abstractness());
-                            break;
-                        case FIRST_COLUMN + 6 : row[column] = getShortFloat(elements[elt].instability());
-                            break;
-                        case FIRST_COLUMN + 7 : row[column] = getShortFloat(elements[elt].distance());
-                            break;
-                        case LAST_COLUMN : row[column] = "" + elements[elt].containsCycle();
-                            break;
-                        default :
-                            break;
+                    case FIRST_COLUMN : row[column] = "" + elements[elt].getName();
+                    break;
+                    case FIRST_COLUMN + 1 : row[column] = "" + elements[elt].getConcreteClassCount();
+                    break;
+                    case FIRST_COLUMN + 2 : row[column] = "" + elements[elt].getAbstractClassCount();
+                    break;
+                    case FIRST_COLUMN + 3 : row[column] = "" + elements[elt].afferentCoupling();
+                    break;
+                    case FIRST_COLUMN + 4 : row[column] = "" + elements[elt].efferentCoupling();
+                    break;
+                    case FIRST_COLUMN + 5 : row[column] = getShortFloat(elements[elt].abstractness());
+                    break;
+                    case FIRST_COLUMN + 6 : row[column] = getShortFloat(elements[elt].instability());
+                    break;
+                    case FIRST_COLUMN + 7 : row[column] = getShortFloat(elements[elt].distance());
+                    break;
+                    case LAST_COLUMN : row[column] = "" + elements[elt].containsCycle();
+                    break;
+                    default :
+                        break;
                     }
                 }
                 data[elt] = row;
@@ -248,6 +250,7 @@ public class DependencyView extends ViewPart {
      * This is a callback that will allow us
      * to create the viewer and initialize it.
      */
+    @Override
     public void createPartControl(Composite parent) {
         sashForm = new SashForm(parent, SWT.VERTICAL);
         sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -324,9 +327,9 @@ public class DependencyView extends ViewPart {
 
     protected Table createTable(Composite mySashForm) {
         Table table =
-            new Table(
-                mySashForm,
-                SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
+                new Table(
+                        mySashForm,
+                        SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
         table.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -340,6 +343,7 @@ public class DependencyView extends ViewPart {
         final PackageSorter sorter = new PackageSorter();
         viewer.setSorter(sorter);
         SelectionListener headerListener = new SelectionAdapter() {
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 int selectedCol = table.indexOf((TableColumn) e.widget);
                 if (selectedCol == sorter.getPriority()) {
@@ -362,6 +366,7 @@ public class DependencyView extends ViewPart {
     /**
      * Passing the focus request to the viewer's control.
      */
+    @Override
     public void setFocus() {
         if(sashForm!= null){
             sashForm.setFocus();
@@ -403,6 +408,7 @@ public class DependencyView extends ViewPart {
     /* (non-Javadoc)
      * @see org.eclipse.ui.IWorkbenchPart#dispose()
      */
+    @Override
     public void dispose() {
         sashForm.dispose();
         disposed = true;

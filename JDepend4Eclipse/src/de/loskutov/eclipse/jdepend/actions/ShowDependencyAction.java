@@ -53,8 +53,8 @@ public class ShowDependencyAction implements IObjectActionDelegate {
         IWorkbench workb = JDepend4EclipsePlugin.getDefault().getWorkbench();
         try {
             workb.showPerspective(
-                "de.loskutov.eclipse.jdepend.ui.JDependPerspective", //$NON-NLS-1$
-                workb.getActiveWorkbenchWindow());
+                    "de.loskutov.eclipse.jdepend.ui.JDependPerspective", //$NON-NLS-1$
+                    workb.getActiveWorkbenchWindow());
         } catch (Exception e) {
             JDepend4EclipsePlugin.handle(e);
             return;
@@ -91,9 +91,9 @@ public class ShowDependencyAction implements IObjectActionDelegate {
     }
 
     /** Returns the selected resources.
-      *
-      * @return the selected resources
-      */
+     *
+     * @return the selected resources
+     */
     protected IResource[] getSelectedResources() {
         ArrayList resources = new ArrayList();
         if (selection != null && !selection.isEmpty()) {

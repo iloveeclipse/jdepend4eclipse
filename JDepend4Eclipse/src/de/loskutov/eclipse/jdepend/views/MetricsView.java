@@ -55,6 +55,7 @@ public class MetricsView extends ViewPart {
     /**
      * Cleanup
      */
+    @Override
     public void dispose() {
         paintCanvas.dispose();
         paintSurface.dispose();
@@ -79,6 +80,7 @@ public class MetricsView extends ViewPart {
      * This is a callback that will allow us
      * to create the viewer and initialize it.
      */
+    @Override
     public void createPartControl(Composite parent) {
         paintCanvas = new Canvas(parent, SWT.NONE);
         GridData gridData = new GridData(GridData.FILL_BOTH);
@@ -102,6 +104,7 @@ public class MetricsView extends ViewPart {
     /**
      * Passing the focus request to the viewer's control.
      */
+    @Override
     public void setFocus() {
         paintSurface.setFocus();
     }
@@ -149,9 +152,9 @@ public class MetricsView extends ViewPart {
 
             tipLabelImage = new Label(tipShell, SWT.NONE);
             tipLabelImage
-                    .setForeground(display.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
+            .setForeground(display.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
             tipLabelImage
-                    .setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+            .setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
             tipLabelImage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL
                     | GridData.VERTICAL_ALIGN_CENTER));
 
@@ -179,9 +182,11 @@ public class MetricsView extends ViewPart {
              * Get out of the way if we attempt to activate the control underneath the tooltip
              */
             control.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseDown(MouseEvent e) {
-                    if (tipShell.isVisible())
+                    if (tipShell.isVisible()) {
                         tipShell.setVisible(false);
+                    }
                 }
             });
 
@@ -189,12 +194,14 @@ public class MetricsView extends ViewPart {
              * Trap hover events to pop-up tooltip
              */
             control.addMouseTrackListener(new MouseTrackAdapter() {
+                @Override
                 public void mouseExit(MouseEvent e) {
                     if (tipShell.isVisible()) {
                         tipShell.setVisible(false);
                     }
                 }
 
+                @Override
                 public void mouseHover(MouseEvent event) {
                     Point pt = new Point(event.x, event.y);
                     String text = getMetricInfo(event.x, event.y);

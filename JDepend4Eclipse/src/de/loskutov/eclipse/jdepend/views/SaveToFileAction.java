@@ -53,6 +53,7 @@ public class SaveToFileAction extends Action {
         super(text);
     }
 
+    @Override
     public void run() {
 
         IPreferenceStore prefs = JDepend4EclipsePlugin.getDefault().getPreferenceStore();
@@ -150,6 +151,7 @@ public class SaveToFileAction extends Action {
         }
 
         Job job = new Job("Save JDepend output to file") {
+            @Override
             protected IStatus run(IProgressMonitor monitor) {
                 try {
                     write(fw);

@@ -48,7 +48,7 @@ public class JDepend4EclipsePlugin extends AbstractUIPlugin implements IProperty
     public static final String ID = "de.loskutov.eclipse.jdepend"; //$NON-NLS-1$
     public static final String ICON_PATH = "icons/";                         //$NON-NLS-1$
     /** Map containing preloaded ImageDescriptors */
-    private Map imageDescriptors = new HashMap(13);
+    private final Map imageDescriptors = new HashMap(13);
     public static final String IMG_REFRESH = "refresh.gif"; //$NON-NLS-1$
     public static final String IMG_CLOSE = "close.gif"; //$NON-NLS-1$
     /**
