@@ -113,20 +113,20 @@ public class SaveToFileAction extends Action {
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
         IPath location = new Path(file.getAbsolutePath()); // Path.fromOSString();
         IFile[] files = workspace.getRoot().findFilesForLocation(location);
-        List filesList = filterNonExistentFiles(files);
+        List<IFile> filesList = filterNonExistentFiles(files);
         if (filesList == null || filesList.size() != 1) {
             return null;
         }
-        return (IFile) filesList.get(0);
+        return filesList.get(0);
     }
 
-    private static List filterNonExistentFiles(IFile[] files) {
+    private static List<IFile> filterNonExistentFiles(IFile[] files) {
         if (files == null) {
             return null;
         }
 
         int length = files.length;
-        ArrayList existentFiles = new ArrayList(length);
+        ArrayList<IFile> existentFiles = new ArrayList<IFile>(length);
         for (int i = 0; i < length; i++) {
             if (files[i].exists()) {
                 existentFiles.add(files[i]);

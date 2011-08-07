@@ -569,7 +569,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
             IJavaProject[] originals,
             final boolean includeDefaultPackage)
                     throws JavaModelException {
-        final List packageList = new ArrayList();
+        final List<IPackageFragment> packageList = new ArrayList<IPackageFragment>();
         if (originals == null) {
             IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
             IJavaModel model = JavaCore.create(wsroot);
@@ -581,7 +581,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         IRunnableWithProgress r = new IRunnableWithProgress() {
             public void run(IProgressMonitor myMonitor) {
                 try {
-                    Set packageNameSet = new HashSet();
+                    Set<String> packageNameSet = new HashSet<String>();
                     myMonitor.beginTask(JDepend4EclipsePlugin.getResourceString("JDependPreferencePage.Searching"), projects.length); //$NON-NLS-1$
                     for (int i = 0; i < projects.length; i++) {
                         IPackageFragment[] pkgs = projects[i].getPackageFragments();
@@ -695,13 +695,13 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
      * @return list
      */
     public static String[] parseList(String listString) {
-        List list = new ArrayList(10);
+        List<String> list = new ArrayList<String>(10);
         StringTokenizer tokenizer = new StringTokenizer(listString, ","); //$NON-NLS-1$
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             list.add(token);
         }
-        return (String[]) list.toArray(new String[list.size()]);
+        return list.toArray(new String[list.size()]);
     }
 
     /**
@@ -739,22 +739,22 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
     protected final class FilterContentProvider implements IStructuredContentProvider {
 
         private final CheckboxTableViewer fViewer;
-        private List fFilters;
+        private List<Filter> fFilters;
 
         public FilterContentProvider(CheckboxTableViewer viewer) {
             fViewer = viewer;
-            List active = createActiveStepFiltersList();
-            List inactive = createInactiveStepFiltersList();
-            List defaultlist = createDefaultStepFiltersList();
+            List<String> active = createActiveStepFiltersList();
+            List<String> inactive = createInactiveStepFiltersList();
+            List<String> defaultlist = createDefaultStepFiltersList();
             populateFilters(active, inactive, defaultlist);
             updateActions();
         }
 
         public void setDefaults() {
             fViewer.remove(fFilters.toArray());
-            List active = createActiveStepFiltersList();
-            List inactive = createInactiveStepFiltersList();
-            List defaultlist = createDefaultStepFiltersList();
+            List<String> active = createActiveStepFiltersList();
+            List<String> inactive = createInactiveStepFiltersList();
+            List<String> defaultlist = createDefaultStepFiltersList();
             populateFilters(active, inactive, defaultlist);
 
             boolean useStepFilters =
@@ -773,17 +773,17 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
             saveAsXml.setEnabled(!askBeforeValue);
         }
 
-        protected void populateFilters(List activeList, List inactiveList, List defaultlist) {
-            fFilters = new ArrayList(activeList.size() + inactiveList.size() + defaultlist.size());
+        protected void populateFilters(List<String> activeList, List<String> inactiveList, List<String> defaultlist) {
+            fFilters = new ArrayList<Filter>(activeList.size() + inactiveList.size() + defaultlist.size());
             populateList(inactiveList, false);
             populateList(activeList, true);
             populateList(defaultlist, true);
         }
 
-        protected void populateList(List list, boolean checked) {
-            Iterator iterator = list.iterator();
+        protected void populateList(List<String> list, boolean checked) {
+            Iterator<String> iterator = list.iterator();
             while (iterator.hasNext()) {
-                String name = (String) iterator.next();
+                String name = iterator.next();
                 addFilter(name, checked);
             }
         }
@@ -793,7 +793,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
          *
          * @return list
          */
-        protected List createActiveStepFiltersList() {
+        protected List<String> createActiveStepFiltersList() {
             String[] strings =
                     parseList(
                             getPreferenceStore().getString(JDependConstants.PREF_ACTIVE_FILTERS_LIST));
@@ -805,7 +805,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
          *
          * @return list
          */
-        protected List createDefaultStepFiltersList() {
+        protected List<String> createDefaultStepFiltersList() {
             String[] strings =
                     parseList(
                             getPreferenceStore().getDefaultString(
@@ -818,7 +818,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
          *
          * @return list
          */
-        protected List createInactiveStepFiltersList() {
+        protected List<String> createInactiveStepFiltersList() {
             String[] strings =
                     parseList(
                             getPreferenceStore().getString(JDependConstants.PREF_INACTIVE_FILTERS_LIST));
@@ -842,11 +842,11 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
                     JDependConstants.PREF_USE_FILTERS,
                     fUseFiltersCheckbox.getSelection());
 
-            List active = new ArrayList(fFilters.size());
-            List inactive = new ArrayList(fFilters.size());
-            Iterator iterator = fFilters.iterator();
+            List<String> active = new ArrayList<String>(fFilters.size());
+            List<String> inactive = new ArrayList<String>(fFilters.size());
+            Iterator<Filter> iterator = fFilters.iterator();
             while (iterator.hasNext()) {
-                Filter filter = (Filter) iterator.next();
+                Filter filter = iterator.next();
                 String name = filter.getName();
                 if (filter.isChecked()) {
                     active.add(name);
@@ -854,9 +854,9 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
                     inactive.add(name);
                 }
             }
-            String pref = serializeList((String[]) active.toArray(new String[active.size()]));
+            String pref = serializeList(active.toArray(new String[active.size()]));
             getPreferenceStore().setValue(JDependConstants.PREF_ACTIVE_FILTERS_LIST, pref);
-            pref = serializeList((String[]) inactive.toArray(new String[inactive.size()]));
+            pref = serializeList(inactive.toArray(new String[inactive.size()]));
             getPreferenceStore().setValue(JDependConstants.PREF_INACTIVE_FILTERS_LIST, pref);
         }
 

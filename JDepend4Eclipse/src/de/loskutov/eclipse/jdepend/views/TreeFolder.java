@@ -23,15 +23,15 @@ import de.loskutov.eclipse.jdepend.JDepend4EclipsePlugin;
 
 public class TreeFolder extends TreeObject {
     protected boolean cycle;
-    private final ArrayList children;
-    private final ArrayList iJavaElements;
+    private final ArrayList<TreeObject> children;
+    private final ArrayList<IJavaElement> iJavaElements;
     private final IJavaElement javaElement;
 
     public TreeFolder(IJavaElement javaElement) {
         super();
         this.javaElement = javaElement;
-        children = new ArrayList();
-        iJavaElements = new ArrayList();
+        children = new ArrayList<TreeObject>();
+        iJavaElements = new ArrayList<IJavaElement>();
         addIJavaElement(javaElement);
         if(javaElement != null) {
             try {
@@ -87,7 +87,7 @@ public class TreeFolder extends TreeObject {
             for (int i = 0; i < tc.length; i++) {
                 tf.addChild(tc[i]);
             }
-            IJavaElement [] elements = (IJavaElement [])((TreeFolder)child).getIJavaElements().toArray(new IJavaElement [0]);
+            IJavaElement [] elements = ((TreeFolder)child).getIJavaElements().toArray(new IJavaElement [0]);
             for (int i = 0; i < elements.length; i++) {
                 tf.addIJavaElement(elements[i]);
             }
@@ -101,7 +101,7 @@ public class TreeFolder extends TreeObject {
         }
     }
     public TreeObject[] getChildren() {
-        return (TreeObject[]) children.toArray(new TreeObject[children.size()]);
+        return children.toArray(new TreeObject[children.size()]);
     }
     public boolean hasChildren() {
         return children.size() > 0;
@@ -119,7 +119,7 @@ public class TreeFolder extends TreeObject {
         if(children != null){
             TreeObject to;
             for (int i = 0; i < children.size(); i++) {
-                to = (TreeObject)children.get(i);
+                to = children.get(i);
                 if(to.hasCycle()){
                     return true;
                 }
@@ -134,7 +134,7 @@ public class TreeFolder extends TreeObject {
         }
         TreeObject to;
         for (int i = 0; i < children.size(); i++) {
-            to = (TreeObject)children.get(i);
+            to = children.get(i);
             if(to.getPackageName().endsWith(pack.getName())){
                 return to;
             }
@@ -148,12 +148,12 @@ public class TreeFolder extends TreeObject {
         return null;
     }
 
-    public ArrayList getClassesLocation() throws JavaModelException {
-        ArrayList myIJavaElements = getIJavaElements();
+    public ArrayList<String> getClassesLocation() throws JavaModelException {
+        ArrayList<IJavaElement> myIJavaElements = getIJavaElements();
         String dir;
-        ArrayList dirs = new ArrayList();
+        ArrayList<String> dirs = new ArrayList<String>();
         for (int i = 0; i < myIJavaElements.size(); i++) {
-            dir = getPackageOutputPath((IJavaElement) myIJavaElements.get(i));
+            dir = getPackageOutputPath(myIJavaElements.get(i));
             if(!dirs.contains(dir)){
                 dirs.add(dir);
             }
@@ -167,13 +167,13 @@ public class TreeFolder extends TreeObject {
         return dirs;
     }
 
-    public ArrayList getIJavaElements(){
+    public ArrayList<IJavaElement> getIJavaElements(){
         return iJavaElements;
     }
 
     public IResource [] getIResources(){
-        IJavaElement [] elements = (IJavaElement [])getIJavaElements().toArray(new IJavaElement [0]);
-        ArrayList resources = new ArrayList();
+        IJavaElement [] elements = getIJavaElements().toArray(new IJavaElement [0]);
+        ArrayList<IResource> resources = new ArrayList<IResource>();
         IResource tresource;
         for (int i = 0; i < elements.length; i++) {
             try {
@@ -188,7 +188,7 @@ public class TreeFolder extends TreeObject {
         if(getIResource() != null){
             resources.add(getIResource());
         }
-        return (IResource [])resources.toArray(new IResource [resources.size()]);
+        return resources.toArray(new IResource [resources.size()]);
     }
 
     public void setContainsCycle(boolean cycle){
@@ -202,7 +202,7 @@ public class TreeFolder extends TreeObject {
 
     @Override
     public String getPackageName() {
-        ArrayList elements = this.getIJavaElements();
+        ArrayList<IJavaElement> elements = this.getIJavaElements();
         if(elements.size() == 0){
             if(getIResource() != null){
                 String path = iResource.getFullPath().removeFirstSegments(1).toString();
@@ -210,6 +210,6 @@ public class TreeFolder extends TreeObject {
             }
             return "";        //$NON-NLS-1$
         }
-        return getJavaPackageName((IJavaElement)elements.get(0));
+        return getJavaPackageName(elements.get(0));
     }
 }

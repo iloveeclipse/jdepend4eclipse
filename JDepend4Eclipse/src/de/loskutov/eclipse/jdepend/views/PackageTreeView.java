@@ -103,12 +103,12 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
     protected Action actionRefresh;
     protected Action actionConsole;
     protected Action actionSave;
-    protected List analyzedPackages;
+    protected List<JavaPackage> analyzedPackages;
     protected ToolTipHandler tooltip;
     protected TreeSelectionListener treeSelectionHandler;
 
     /** key is Resource, value is treeObject*/
-    protected HashMap resourceMap;
+    protected HashMap<IResource, TreeObject> resourceMap;
 
     /** The view's identifier */
     public static final String ID = JDepend4EclipsePlugin.ID + ".views.PackageTreeView"; //$NON-NLS-1$
@@ -116,18 +116,18 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
     final class TreeSelectionListener implements ISelectionChangedListener, ISelectionProvider {
 
         private TreeObject lastSelection;
-        private final List listeners;
+        private final List<ISelectionChangedListener> listeners;
 
         public TreeSelectionListener() {
             super();
-            listeners = new ArrayList();
+            listeners = new ArrayList<ISelectionChangedListener>();
         }
 
         public void selectionChanged(SelectionChangedEvent event) {
             IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 
-            ArrayList al = new ArrayList();
-            Iterator iter = selection.iterator();
+            ArrayList<IResource> al = new ArrayList<IResource>();
+            Iterator<?> iter = selection.iterator();
             IResource [] resources;
             while (iter.hasNext()) {
                 TreeObject o = (TreeObject) iter.next();
@@ -146,7 +146,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                     }
                 }
             }
-            resources = (IResource[]) al.toArray(new IResource[al.size()]);
+            resources = al.toArray(new IResource[al.size()]);
 
             updateDependencyView(analyzedPackages, resources);
             updateMetricsView(analyzedPackages, resources);
@@ -179,7 +179,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             ISelection selection = getSelection();
             SelectionChangedEvent event = new SelectionChangedEvent(this, selection);
             for (int i = 0; i < listeners.size(); i++) {
-                ((ISelectionChangedListener)listeners.get(i)).selectionChanged(event);
+                listeners.get(i).selectionChanged(event);
             }
         }
 
@@ -257,10 +257,10 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         /**
          * @return result of JDepend run, never null
          */
-        public List analyze(TreeFolder newRoot, IResource[] resource) {
+        public List<JavaPackage> analyze(TreeFolder newRoot, IResource[] resource) {
             resourceMap.clear();
             if (resource == null) {
-                return new ArrayList();
+                return new ArrayList<JavaPackage>();
             }
 
             JDepend jdepend =  JDepend4EclipsePlugin.getJDependInstance();
@@ -275,11 +275,11 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                     }
                 }
             }
-            List packages = runJDepend(jdepend, newRoot.getChildren());
+            List<JavaPackage> packages = runJDepend(jdepend, newRoot.getChildren());
             // update cycle info
             // set cycle to true, if one of packages is under the founded tree root
             for (int j = 0; j < packages.size(); j++) {
-                JavaPackage jp = (JavaPackage)packages.get(j);
+                JavaPackage jp = packages.get(j);
                 boolean cycle = jp.containsCycle();
                 if(cycle){
                     if(jp.getName().length() == 0){
@@ -341,12 +341,12 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             }
 
             TreeFolder tree = (TreeFolder) resourceMap.get(folder);
-            ArrayList treeRoots = null;
+            ArrayList<TreeFolder> treeRoots = null;
             //add parent package, if not exist
             if (tree == null) {
                 tree = new TreeFolder(javaElement);
                 if (filter.accept(tree.getPackageName())) {
-                    treeRoots = new ArrayList();
+                    treeRoots = new ArrayList<TreeFolder>();
                     treeRoots.add(tree);
                     resourceMap.put(folder, tree);
                 } else {
@@ -386,7 +386,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                 }
             }
 
-            return  (TreeFolder[])treeRoots.toArray(new TreeFolder[treeRoots.size()]);
+            return  treeRoots.toArray(new TreeFolder[treeRoots.size()]);
         }
 
     }
@@ -528,7 +528,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
 
                     if(!to.isLeaf()){
                         try {
-                            ArrayList paths = ((TreeFolder)to).getClassesLocation();
+                            ArrayList<String> paths = ((TreeFolder)to).getClassesLocation();
                             for (int i = 0; i < paths.size(); i++) {
                                 sb.append('\n').append(paths.get(i));
                             }
@@ -562,21 +562,21 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
      */
     public PackageTreeView() {
         super();
-        resourceMap = new HashMap(29);
-        analyzedPackages = new ArrayList();
+        resourceMap = new HashMap<IResource, TreeObject>(29);
+        analyzedPackages = new ArrayList<JavaPackage>();
     }
 
     /**
      * @param treeObjects not null
      * @return non null list
      */
-    protected List runJDepend(JDepend jdepend, TreeObject[] treeObjects) {
+    protected List<JavaPackage> runJDepend(JDepend jdepend, TreeObject[] treeObjects) {
         for (int i = 0; i < treeObjects.length; i++) {
             try {
                 if(!treeObjects[i].isLeaf()){
                     TreeFolder folder = (TreeFolder)treeObjects[i];
                     // add roots
-                    ArrayList dirs = folder.getClassesLocation();
+                    ArrayList<String> dirs = folder.getClassesLocation();
                     for (int j = 0; j < dirs.size(); j++) {
                         jdepend.addDirectory("" + dirs.get(j)); //$NON-NLS-1$
                     }
@@ -587,13 +587,13 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             }
         }
 
-        final List packages = new ArrayList(jdepend.analyze());
-        List filteredPackages = filterPackages(packages, jdepend);
+        final List<?> packages = new ArrayList<Object>(jdepend.analyze());
+        List<JavaPackage> filteredPackages = filterPackages(packages, jdepend);
         Collections.sort(filteredPackages, new PackageComparator(PackageComparator.byName()));
         return filteredPackages;
     }
 
-    public void updateUI(TreeFolder newRoot, IResource[] folder, List packages){
+    public void updateUI(TreeFolder newRoot, IResource[] folder, List<JavaPackage> packages){
         analyzedPackages = packages;
         boolean hasContent = !packages.isEmpty();
         actionSave.setEnabled(hasContent);
@@ -609,15 +609,15 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         updateMetricsView(packages, folder);
     }
 
-    protected void updateMetricsView(List packages, IResource[] folder){
+    protected void updateMetricsView(List<JavaPackage> packages, IResource[] folder){
         if(packages == null){
             return;
         }
         JavaPackage tempPack1;
-        List selPackages = new ArrayList();
+        List<JavaPackage> selPackages = new ArrayList<JavaPackage>();
         // find corresponding packages
         for (int i = 0; i < folder.length; i++) {
-            TreeObject to = (TreeObject)resourceMap.get(folder[i]);
+            TreeObject to = resourceMap.get(folder[i]);
             if(to == null){
                 continue;
             }
@@ -625,7 +625,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                 // find packages, matching to folder
                 String tempFolderName = to.getPackageName();
                 for (int j = 0; j < packages.size(); j++) {
-                    tempPack1 = (JavaPackage) packages.get(j);
+                    tempPack1 = packages.get(j);
                     if(tempFolderName.equals(tempPack1.getName())
                             || tempFolderName.endsWith("." + tempPack1.getName()) ){  //$NON-NLS-1$
 
@@ -640,12 +640,12 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
 
         MetricsView metricsView = (MetricsView) getView(MetricsView.ID);
         if(metricsView != null){
-            metricsView.setInput((JavaPackage[]) selPackages.toArray(new JavaPackage[0]));
+            metricsView.setInput(selPackages.toArray(new JavaPackage[0]));
         }
     }
 
-    private static List filterPackages(List packages, JDepend jdepend){
-        ArrayList filteredPackages = new ArrayList();
+    private static List<JavaPackage> filterPackages(List<?> packages, JDepend jdepend){
+        ArrayList<JavaPackage> filteredPackages = new ArrayList<JavaPackage>();
         PackageFilter filter = jdepend.getFilter();
         for (int i = 0; i < packages.size(); i++) {
             JavaPackage tempPackage = (JavaPackage)packages.get(i);
@@ -656,16 +656,16 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         return filteredPackages;
     }
 
-    protected List updateDependencyView(List packages, IResource[] folder) {
+    protected List<JavaPackage> updateDependencyView(List<JavaPackage> packages, IResource[] folder) {
 
         TreeObject to = null;
-        List selClasses = new ArrayList();
+        List<JavaClass> selClasses = new ArrayList<JavaClass>();
         ClassFileParser classParser = JDepend4EclipsePlugin.getJDependClassFileParserInstance();
 
         JDepend jdepend =  JDepend4EclipsePlugin.getJDependInstance();
         PackageFilter filter = jdepend.getFilter();
         JavaPackage root = new JavaPackage("root");     //$NON-NLS-1$
-        List selPackages = new ArrayList();
+        List<JavaPackage> selPackages = new ArrayList<JavaPackage>();
 
         JavaPackage tempPack1;
         JavaPackage tempPack2;
@@ -674,7 +674,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         JavaClass tempClass = null;
         // find corresponding packages
         for (int i = 0; i < folder.length; i++) {
-            to = (TreeObject)resourceMap.get(folder[i]);
+            to = resourceMap.get(folder[i]);
             if(to == null){
                 continue;
             }
@@ -682,7 +682,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                 // find packages, matching to folder
                 String tempFolderName = to.getPackageName();
                 for (int j = 0; j < packages.size(); j++) {
-                    tempPack1 = (JavaPackage) packages.get(j);
+                    tempPack1 = packages.get(j);
                     if(tempFolderName.equals(tempPack1.getName())
                             || tempFolderName.endsWith("." + tempPack1.getName()) ){  //$NON-NLS-1$
                         selPackages.add(tempPack1);
@@ -702,15 +702,15 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             }
         }
 
-        List aff;
-        List eff;
+        List<?> aff;
+        List<?> eff;
 
         if(folder.length > 0 && selPackages.isEmpty() && folder[0] instanceof IFolder){
             selPackages = packages;
         }
 
         for (int i = 0; i < selPackages.size(); i++) {
-            tempPack1 = (JavaPackage)selPackages.get(i);
+            tempPack1 = selPackages.get(i);
 
             aff = tempPack1.getAfferents();
             for (int j = 0; j < aff.size(); j++) {
@@ -729,11 +729,11 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             }
         }
 
-        ArrayList imported = new ArrayList();
+        ArrayList<JavaPackage> imported = new ArrayList<JavaPackage>();
         for (int i = 0; i < selClasses.size(); i++) {
-            tempClass = (JavaClass)selClasses.get(i);
+            tempClass = selClasses.get(i);
 
-            List effP = new ArrayList(tempClass.getImportedPackages());
+            List<?> effP = new ArrayList<Object>(tempClass.getImportedPackages());
             for (int j = 0; j < effP.size(); j++) {
                 tempPack2 = (JavaPackage)effP.get(j);
                 if(!imported.contains(tempPack2) && filter.accept(tempPack2.getName())){
@@ -744,9 +744,9 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
 
         if(selClasses.size()> 0){
             for (int j = 0; j < imported.size(); j++) {
-                tempName = ((JavaPackage)imported.get(j)).getName();
+                tempName = imported.get(j).getName();
                 for (int i = 0; i < packages.size(); i++) {
-                    tempPack1 = (JavaPackage)packages.get(i);
+                    tempPack1 = packages.get(i);
                     if(tempPack1.getName().equals(tempName)){
                         //System.out.println("add efferent from class:" + tempPack1.getName());
                         root.addEfferent(tempPack1);
@@ -756,7 +756,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             }
         }
 
-        ArrayList cl = new ArrayList();
+        ArrayList<Object> cl = new ArrayList<Object>();
 
         IPreferenceStore settings = JDepend4EclipsePlugin.getDefault().getPreferenceStore();
         if (settings.getBoolean(JDependConstants.PREF_USE_ALL_CYCLES_SEARCH)) {
@@ -782,7 +782,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         Collections.sort(cl, pc);
 
         // clear multiple packages in cycle list
-        ArrayList cl2 = new ArrayList();
+        ArrayList<Object> cl2 = new ArrayList<Object>();
         Object tempObj;
         for (int i = 0; i < cl.size(); i++) {
             tempObj = cl.get(i);
@@ -901,7 +901,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                 }
 
                 if(!to.isLeaf()){
-                    IJavaElement [] javaElements = (IJavaElement [])((TreeFolder)to).getIJavaElements().toArray(new IJavaElement [0]);
+                    IJavaElement [] javaElements = ((TreeFolder)to).getIJavaElements().toArray(new IJavaElement [0]);
                     Action oa = new OpenJavaPerspectiveAction();
                     oa.run();
 
@@ -938,7 +938,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             @Override
             public void run() {
                 TreeObject [] childs = getRoot().getChildren();
-                ArrayList al = new ArrayList();
+                ArrayList<IResource> al = new ArrayList<IResource>();
                 IResource [] roots;
                 for (int i = 0; i < childs.length; i++) {
                     if(childs[i].isLeaf()){
@@ -952,7 +952,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                         }
                     }
                 }
-                IResource [] dirs = (IResource []) al.toArray(new IResource[al.size()]);
+                IResource [] dirs = al.toArray(new IResource[al.size()]);
                 runJDependJob(dirs);
             }
         };
@@ -989,15 +989,15 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                 if(asXml){
                     jdep = new jdepend.xmlui.JDepend(new PrintWriter(fw)){
                         @Override
-                        protected ArrayList getPackagesList() {
-                            return (ArrayList) analyzedPackages;
+                        protected ArrayList<JavaPackage> getPackagesList() {
+                            return (ArrayList<JavaPackage>) analyzedPackages;
                         }
                     };
                 } else {
                     jdep = new jdepend.textui.JDepend(new PrintWriter(fw)){
                         @Override
-                        protected ArrayList getPackagesList() {
-                            return (ArrayList) analyzedPackages;
+                        protected ArrayList<JavaPackage> getPackagesList() {
+                            return (ArrayList<JavaPackage>) analyzedPackages;
                         }
                     };
                 }
@@ -1095,7 +1095,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             protected IStatus run(IProgressMonitor monitor) {
                 try {
                     final TreeFolder newRoot = new TreeFolder();
-                    final List packages = treeContent.analyze(newRoot, resources);
+                    final List<JavaPackage> packages = treeContent.analyze(newRoot, resources);
                     PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
                         public void run() {
                             updateUI(newRoot, resources, packages);

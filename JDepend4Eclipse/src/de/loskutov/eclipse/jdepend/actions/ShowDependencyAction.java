@@ -95,9 +95,9 @@ public class ShowDependencyAction implements IObjectActionDelegate {
      * @return the selected resources
      */
     protected IResource[] getSelectedResources() {
-        ArrayList resources = new ArrayList();
+        ArrayList<Object> resources = new ArrayList<Object>();
         if (selection != null && !selection.isEmpty()) {
-            for (Iterator elements = selection.iterator(); elements.hasNext();) {
+            for (Iterator<?> elements = selection.iterator(); elements.hasNext();) {
                 Object next = elements.next();
                 if(next == null){
                     continue;
@@ -127,7 +127,7 @@ public class ShowDependencyAction implements IObjectActionDelegate {
         }
 
         if (!resources.isEmpty()) {
-            return (IResource[]) resources.toArray(new IResource[0]);
+            return resources.toArray(new IResource[0]);
         }
         return new IResource[0];
     }

@@ -48,7 +48,7 @@ public class JDepend4EclipsePlugin extends AbstractUIPlugin implements IProperty
     public static final String ID = "de.loskutov.eclipse.jdepend"; //$NON-NLS-1$
     public static final String ICON_PATH = "icons/";                         //$NON-NLS-1$
     /** Map containing preloaded ImageDescriptors */
-    private final Map imageDescriptors = new HashMap(13);
+    private final Map<String, ImageDescriptor> imageDescriptors = new HashMap<String, ImageDescriptor>(13);
     public static final String IMG_REFRESH = "refresh.gif"; //$NON-NLS-1$
     public static final String IMG_CLOSE = "close.gif"; //$NON-NLS-1$
     /**
@@ -158,13 +158,13 @@ public class JDepend4EclipsePlugin extends AbstractUIPlugin implements IProperty
      * @return list
      */
     private static String[] parseList(String listString) {
-        List list = new ArrayList(10);
+        List<String> list = new ArrayList<String>(10);
         StringTokenizer tokenizer = new StringTokenizer(listString, ","); //$NON-NLS-1$
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             list.add(token);
         }
-        return (String[]) list.toArray(new String[list.size()]);
+        return list.toArray(new String[list.size()]);
     }
 
 
@@ -174,7 +174,7 @@ public class JDepend4EclipsePlugin extends AbstractUIPlugin implements IProperty
      * @return the ImageDescriptor instance.
      */
     public ImageDescriptor getImageDescriptor(String id) {
-        ImageDescriptor imageDescriptor = (ImageDescriptor) imageDescriptors
+        ImageDescriptor imageDescriptor = imageDescriptors
                 .get(id);
         if (imageDescriptor == null) {
             imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(

@@ -12,6 +12,8 @@ import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.util.List;
 
+import jdepend.framework.JavaPackage;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -43,7 +45,7 @@ public class JDependConsole extends MessageConsole {
 
     boolean disposed;
 
-    private static List packages;
+    private static List<JavaPackage> packages;
 
     private static class ToggleXmlAction extends Action {
 
@@ -125,7 +127,7 @@ public class JDependConsole extends MessageConsole {
         return console;
     }
 
-    public static void showConsole(final List packages1) {
+    public static void showConsole(final List<JavaPackage> packages1) {
         JDependConsole.packages = packages1;
         if(packages == null || JDepend4EclipsePlugin.getDefault().getPreferenceStore()
                 .getBoolean(JDependConstants.PREF_OUTPUT_NIX)){
@@ -146,14 +148,14 @@ public class JDependConsole extends MessageConsole {
                 if(asXml){
                     jdep = new jdepend.xmlui.JDepend(pw){
                         @Override
-                        protected List getPackagesList() {
+                        protected List<JavaPackage> getPackagesList() {
                             return packages1;
                         }
                     };
                 } else {
                     jdep = new jdepend.textui.JDepend(pw){
                         @Override
-                        protected List getPackagesList() {
+                        protected List<JavaPackage> getPackagesList() {
                             return packages1;
                         }
                     };
