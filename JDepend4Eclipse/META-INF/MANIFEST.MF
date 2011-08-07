@@ -21,4 +21,4 @@ Eclipse-AutoStart: true
 Export-Package: jdepend.framework,
  jdepend.textui,
  jdepend.xmlui
-Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
