@@ -80,16 +80,16 @@ public class JavaClassBuilder {
     public Collection buildClasses(File file) throws IOException {
 
         if (fileManager.acceptClassFile(file)) {
-            FileInputStream fis = null;
+            InputStream is = null;
             try {
-                fis = new FileInputStream(file);
-                JavaClass parsedClass = parser.parse(fis);
+                is = new BufferedInputStream(new FileInputStream(file));
+                JavaClass parsedClass = parser.parse(is);
                 Collection javaClasses = new ArrayList();
                 javaClasses.add(parsedClass);
                 return javaClasses;
             } finally {
-                if (fis != null) {
-                    fis.close();
+                if (is != null) {
+                    is.close();
                 }
             }
         } else if (fileManager.acceptJarFile(file)) {
@@ -123,7 +123,7 @@ public class JavaClassBuilder {
             if (fileManager.acceptClassFileName(e.getName())) {
                 InputStream is = null;
                 try {
-                    is = file.getInputStream(e);
+	                is = new BufferedInputStream(file.getInputStream(e));
                     JavaClass jc = parser.parse(is);
                     javaClasses.add(jc);
                 } finally {

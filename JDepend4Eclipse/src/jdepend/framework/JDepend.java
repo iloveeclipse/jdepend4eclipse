@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * The <code>JDepend</code> class analyzes directories of Java class files
+ * The <code>JDepend</code> class analyzes directories of Java class files 
  * and generates the following metrics for each Java package.
  * <p>
  * <ul>
@@ -70,12 +70,12 @@ import java.util.*;
  * Example API use:
  * <p>
  * <blockquote>
- *
+ * 
  * <pre>
  * JDepend jdepend = new JDepend();
  * jdepend.addDirectory(&quot;/path/to/classes&quot;);
  * Collection packages = jdepend.analyze();
- *
+ * 
  * Iterator i = packages.iterator();
  * while (i.hasNext()) {
  *     JavaPackage jPackage = (JavaPackage) i.next();
@@ -88,14 +88,14 @@ import java.util.*;
  *     boolean b = jPackage.containsCycle();
  * }
  * </pre>
- *
+ * 
  * </blockquote>
  * </p>
  * <p>
  * This class is the data model used by the <code>jdepend.textui.JDepend</code>
  * and <code>jdepend.swingui.JDepend</code> views.
  * </p>
- *
+ * 
  * @author <b>Mike Clark</b>
  * @author Clarkware Consulting, Inc.
  */
@@ -127,17 +127,17 @@ public class JDepend {
         addPackages(config.getConfiguredPackages());
         analyzeInnerClasses(config.getAnalyzeInnerClasses());
     }
-
+    
     /**
      * Analyzes the registered directories and returns the collection of
      * analyzed packages.
-     *
+     * 
      * @return Collection of analyzed packages.
      */
     public Collection analyze() {
 
         Collection classes = builder.build();
-
+        
         for (Iterator i = classes.iterator(); i.hasNext();) {
             analyzeClass((JavaClass)i.next());
         }
@@ -148,17 +148,17 @@ public class JDepend {
     /**
      * Adds the specified directory name to the collection of directories to be
      * analyzed.
-     *
+     * 
      * @param name Directory name.
      * @throws IOException If the directory is invalid.
      */
     public void addDirectory(String name) throws IOException {
         fileManager.addDirectory(name);
     }
-
+    
     /**
      * Sets the list of components.
-     *
+     * 
      * @param components Comma-separated list of components.
      */
     public void setComponents(String components) {
@@ -172,17 +172,17 @@ public class JDepend {
 
     /**
      * Determines whether inner classes are analyzed.
-     *
-     * @param b <code>true</code> to analyze inner classes;
+     * 
+     * @param b <code>true</code> to analyze inner classes; 
      *          <code>false</code> otherwise.
      */
-    public final void analyzeInnerClasses(boolean b) {
+    public void analyzeInnerClasses(boolean b) {
         fileManager.acceptInnerClasses(b);
     }
 
     /**
      * Returns the collection of analyzed packages.
-     *
+     * 
      * @return Collection of analyzed packages.
      */
     public Collection getPackages() {
@@ -191,7 +191,7 @@ public class JDepend {
 
     /**
      * Returns the analyzed package of the specified name.
-     *
+     * 
      * @param name Package name.
      * @return Package, or <code>null</code> if the package was not analyzed.
      */
@@ -201,7 +201,7 @@ public class JDepend {
 
     /**
      * Returns the number of analyzed Java packages.
-     *
+     * 
      * @return Number of Java packages.
      */
     public int countPackages() {
@@ -210,7 +210,7 @@ public class JDepend {
 
     /**
      * Returns the number of registered Java classes to be analyzed.
-     *
+     * 
      * @return Number of classes.
      */
     public int countClasses() {
@@ -219,7 +219,7 @@ public class JDepend {
 
     /**
      * Indicates whether the packages contain one or more dependency cycles.
-     *
+     * 
      * @return <code>true</code> if one or more dependency cycles exist.
      */
     public boolean containsCycles() {
@@ -234,9 +234,9 @@ public class JDepend {
     }
 
     /**
-     * Indicates whether the analyzed packages match the specified
+     * Indicates whether the analyzed packages match the specified 
      * dependency constraint.
-     *
+     * 
      * @return <code>true</code> if the packages match the dependency
      *         constraint
      */
@@ -246,7 +246,7 @@ public class JDepend {
 
     /**
      * Registers the specified parser listener.
-     *
+     * 
      * @param listener Parser listener.
      */
     public void addParseListener(ParserListener listener) {
@@ -256,7 +256,7 @@ public class JDepend {
     /**
      * Adds the specified Java package name to the collection of analyzed
      * packages.
-     *
+     * 
      * @param name Java package name.
      * @return Added Java package.
      */
@@ -284,12 +284,12 @@ public class JDepend {
     }
 
     /**
-     * Adds the specified collection of packages to the collection
+     * Adds the specified collection of packages to the collection 
      * of analyzed packages.
-     *
+     * 
      * @param packages Collection of packages.
      */
-    public final void addPackages(Collection packages) {
+    public void addPackages(Collection packages) {
         for (Iterator i = packages.iterator(); i.hasNext();) {
             JavaPackage pkg = (JavaPackage)i.next();
             addPackage(pkg);
@@ -297,9 +297,9 @@ public class JDepend {
     }
 
     /**
-     * Adds the specified Java package to the collection of
+     * Adds the specified Java package to the collection of 
      * analyzed packages.
-     *
+     * 
      * @param pkg Java package.
      */
     public void addPackage(JavaPackage pkg) {
@@ -316,7 +316,7 @@ public class JDepend {
         return filter;
     }
 
-    public final void setFilter(PackageFilter filter) {
+    public void setFilter(PackageFilter filter) {
         if (parser != null) {
             parser.setFilter(filter);
         }

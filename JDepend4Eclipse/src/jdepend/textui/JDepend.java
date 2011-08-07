@@ -13,7 +13,7 @@ import jdepend.framework.PackageFilter;
  * The <code>JDepend</code> class analyzes directories of Java class files,
  * generates metrics for each Java package, and reports the metrics in a textual
  * format.
- *
+ * 
  * @author <b>Mike Clark</b>
  * @author Clarkware Consulting, Inc.
  */
@@ -35,7 +35,7 @@ public class JDepend {
 
     /**
      * Constructs a <code>JDepend</code> instance with the specified writer.
-     *
+     * 
      * @param writer Writer.
      */
     public JDepend(PrintWriter writer) {
@@ -49,7 +49,7 @@ public class JDepend {
 
     /**
      * Sets the output writer.
-     *
+     * 
      * @param writer Output writer.
      */
     public void setWriter(PrintWriter writer) {
@@ -62,7 +62,7 @@ public class JDepend {
 
     /**
      * Sets the package filter.
-     *
+     * 
      * @param filter Package filter.
      */
     public void setFilter(PackageFilter filter) {
@@ -75,11 +75,11 @@ public class JDepend {
     public void setComponents(String components) {
         analyzer.setComponents(components);
     }
-
+    
     /**
      * Adds the specified directory name to the collection of directories to be
      * analyzed.
-     *
+     * 
      * @param name Directory name.
      * @throws IOException If the directory does not exist.
      */
@@ -89,7 +89,7 @@ public class JDepend {
 
     /**
      * Determines whether inner classes are analyzed.
-     *
+     * 
      * @param b <code>true</code> to analyze inner classes; <code>false</code>
      *            otherwise.
      */
@@ -105,7 +105,9 @@ public class JDepend {
 
         printHeader();
 
-        ArrayList packageList = getPackagesList();
+        Collection packages = analyzer.analyze();
+
+        ArrayList packageList = new ArrayList(packages);
 
         Collections.sort(packageList, new PackageComparator(PackageComparator
                 .byName()));
@@ -119,13 +121,6 @@ public class JDepend {
         printFooter();
 
         getWriter().flush();
-    }
-
-    protected ArrayList getPackagesList() {
-        Collection packages = analyzer.analyze();
-
-        ArrayList packageList = new ArrayList(packages);
-        return packageList;
     }
 
     protected void printPackages(Collection packages) {
@@ -473,7 +468,7 @@ public class JDepend {
         System.err.println("");
         System.err.println("usage: ");
         System.err.println(baseUsage + "[-components <components>]" +
-            " [-file <output file>] <directory> " +
+            " [-file <output file>] <directory> " + 
             "[directory2 [directory 3] ...]");
         System.exit(1);
     }
@@ -500,7 +495,7 @@ public class JDepend {
                     } catch (IOException ioe) {
                         usage(ioe.getMessage());
                     }
-
+                    
                 } else if (args[i].equalsIgnoreCase("-components")) {
                     if (args.length <= i + 1) {
                         usage("Components not specified.");

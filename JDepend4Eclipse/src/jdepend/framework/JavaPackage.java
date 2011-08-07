@@ -4,12 +4,12 @@ import java.util.*;
 
 /**
  * The <code>JavaPackage</code> class represents a Java package.
- *
+ * 
  * @author <b>Mike Clark</b>
  * @author Clarkware Consulting, Inc.
  */
 
-public final class JavaPackage {
+public class JavaPackage {
 
     private String name;
     private int volatility;
@@ -55,7 +55,7 @@ public final class JavaPackage {
     /**
      * Collects the packages participating in the first package dependency cycle
      * detected which originates from this package.
-     *
+     * 
      * @param list Collecting object to be populated with the list of
      *            JavaPackage instances in a cycle.
      * @return <code>true</code> if a cycle exist; <code>false</code>
@@ -88,7 +88,7 @@ public final class JavaPackage {
      * <p>
      * This is a more exhaustive search than that employed by
      * <code>collectCycle</code>.
-     *
+     * 
      * @param list Collecting object to be populated with the list of
      *            JavaPackage instances in a cycle.
      * @return <code>true</code> if a cycle exist; <code>false</code>
@@ -114,7 +114,7 @@ public final class JavaPackage {
         if (containsCycle) {
             return true;
         }
-
+        
         list.remove(this);
         return false;
     }
@@ -123,7 +123,7 @@ public final class JavaPackage {
         classes.add(clazz);
     }
 
-    public Set getClasses() {
+    public Collection getClasses() {
         return classes;
     }
 
@@ -158,9 +158,9 @@ public final class JavaPackage {
     }
 
     /**
-     * Adds the specified Java package as an efferent of this package
+     * Adds the specified Java package as an efferent of this package 
      * and adds this package as an afferent of it.
-     *
+     * 
      * @param imported Java package.
      */
     public void dependsUpon(JavaPackage imported) {
@@ -170,7 +170,7 @@ public final class JavaPackage {
 
     /**
      * Adds the specified Java package as an afferent of this package.
-     *
+     * 
      * @param jPackage Java package.
      */
     public void addAfferent(JavaPackage jPackage) {
@@ -264,5 +264,9 @@ public final class JavaPackage {
 
     public int hashCode() {
         return getName().hashCode();
+    }
+    
+    public String toString() {
+    	return name;
     }
 }
