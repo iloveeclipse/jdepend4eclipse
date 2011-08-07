@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import jdepend.framework.ClassFileParser;
+import jdepend.framework.JDepend;
 import jdepend.framework.JavaClass;
 import jdepend.framework.JavaPackage;
 import jdepend.framework.PackageComparator;
@@ -88,7 +89,6 @@ import org.eclipse.ui.part.IShowInSource;
 import org.eclipse.ui.part.ShowInContext;
 import org.eclipse.ui.part.ViewPart;
 
-import de.loskutov.eclipse.jdepend.JDepend;
 import de.loskutov.eclipse.jdepend.JDepend4EclipsePlugin;
 import de.loskutov.eclipse.jdepend.JDependConstants;
 
@@ -116,7 +116,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
     final class TreeSelectionListener implements ISelectionChangedListener, ISelectionProvider {
 
         private TreeObject lastSelection;
-        private List listeners;
+        private final List listeners;
 
         public TreeSelectionListener() {
             super();
@@ -325,10 +325,10 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             if(javaElement != null){
                 try {
                     isPackageRoot = TreeObject.isPackageRoot(javaElement
-                        .getJavaProject(), folder);
+                            .getJavaProject(), folder);
                 } catch (JavaModelException e) {
-                	// too many errors on 3.3...
-//                    JDepend4EclipsePlugin.handle(e);
+                    // too many errors on 3.3...
+                    //                    JDepend4EclipsePlugin.handle(e);
                 }
             } else {
                 isPackageRoot = false;
@@ -393,16 +393,18 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
 
     static final class ViewLabelProvider extends LabelProvider {
 
+        @Override
         public String getText(Object obj) {
             return obj.toString();
         }
+        @Override
         public Image getImage(Object obj) {
             String imageKey = org.eclipse.jdt.ui.ISharedImages.IMG_OBJS_CLASS;
             if (obj instanceof TreeFolder){
                 TreeFolder tp = (TreeFolder) obj;
                 if(tp.hasCycle()){
                     return PlatformUI.getWorkbench().getSharedImages()
-                        .getImage(ISharedImages.IMG_OBJS_WARN_TSK);
+                            .getImage(ISharedImages.IMG_OBJS_WARN_TSK);
                 }
                 imageKey = org.eclipse.jdt.ui.ISharedImages.IMG_OBJS_PACKAGE;
             }
@@ -444,13 +446,13 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             tipLabelImage.setForeground(display.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
             tipLabelImage.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
             tipLabelImage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL |
-                GridData.VERTICAL_ALIGN_CENTER));
+                    GridData.VERTICAL_ALIGN_CENTER));
 
             tipLabelText = new Label(tipShell, SWT.NONE);
             tipLabelText.setForeground(display.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
             tipLabelText.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
             tipLabelText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL |
-                GridData.VERTICAL_ALIGN_CENTER));
+                    GridData.VERTICAL_ALIGN_CENTER));
         }
 
         void dispose() {
@@ -470,8 +472,11 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
              * Get out of the way if we attempt to activate the control underneath the tooltip
              */
             control.addMouseListener(new MouseAdapter () {
+                @Override
                 public void mouseDown (MouseEvent e) {
-                    if (tipShell.isVisible()) tipShell.setVisible(false);
+                    if (tipShell.isVisible()) {
+                        tipShell.setVisible(false);
+                    }
                 }
             });
 
@@ -479,9 +484,11 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
              * Trap hover events to pop-up tooltip
              */
             control.addMouseTrackListener(new MouseTrackAdapter () {
+                @Override
                 public void mouseExit(MouseEvent e) {
                     if (tipShell.isVisible()) {tipShell.setVisible(false);}
                 }
+                @Override
                 public void mouseHover (MouseEvent event) {
                     Point pt = new Point (event.x, event.y);
 
@@ -620,7 +627,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                 for (int j = 0; j < packages.size(); j++) {
                     tempPack1 = (JavaPackage) packages.get(j);
                     if(tempFolderName.equals(tempPack1.getName())
-                        || tempFolderName.endsWith("." + tempPack1.getName()) ){  //$NON-NLS-1$
+                            || tempFolderName.endsWith("." + tempPack1.getName()) ){  //$NON-NLS-1$
 
                         selPackages.add(tempPack1);
                     }
@@ -677,7 +684,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                 for (int j = 0; j < packages.size(); j++) {
                     tempPack1 = (JavaPackage) packages.get(j);
                     if(tempFolderName.equals(tempPack1.getName())
-                        || tempFolderName.endsWith("." + tempPack1.getName()) ){  //$NON-NLS-1$
+                            || tempFolderName.endsWith("." + tempPack1.getName()) ){  //$NON-NLS-1$
                         selPackages.add(tempPack1);
                     }
                 }
@@ -817,6 +824,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
      * This is a callback that will allow us
      * to create the viewer and initialize it.
      */
+    @Override
     public void createPartControl(Composite parent) {
 
         tooltip = new ToolTipHandler(parent.getShell());
@@ -836,7 +844,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         contributeToActionBars();
         tooltip.activateHoverHelp(viewer.getTree());
         PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(),
-            "de.loskutov.eclipse.jdepend.jdepend"); //$NON-NLS-1$
+                "de.loskutov.eclipse.jdepend.jdepend"); //$NON-NLS-1$
     }
 
     private void hookContextMenu() {
@@ -884,6 +892,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
     private void makeActions() {
         final IPreferenceStore prefs = JDepend4EclipsePlugin.getDefault().getPreferenceStore();
         actionOpenJava = new Action() {
+            @Override
             public void run() {
 
                 TreeObject to = getSelectedElement();
@@ -926,6 +935,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         actionOpenJava.setEnabled(false);
 
         actionRefresh = new Action() {
+            @Override
             public void run() {
                 TreeObject [] childs = getRoot().getChildren();
                 ArrayList al = new ArrayList();
@@ -952,6 +962,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         actionRefresh.setEnabled(false);
 
         actionConsole = new Action("Show JDepend output", IAction.AS_CHECK_BOX) {
+            @Override
             public void run() {
                 if(isChecked()) {
                     prefs.setValue(JDependConstants.PREF_OUTPUT_NIX, false);
@@ -971,17 +982,20 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         actionConsole.setChecked(!prefs.getBoolean(JDependConstants.PREF_OUTPUT_NIX));
 
         actionSave = new SaveToFileAction("Save JDepend output") {
+            @Override
             protected void write(FileWriter fw) {
                 boolean asXml = prefs.getBoolean(JDependConstants.SAVE_AS_XML);
                 jdepend.textui.JDepend jdep;
                 if(asXml){
                     jdep = new jdepend.xmlui.JDepend(new PrintWriter(fw)){
+                        @Override
                         protected ArrayList getPackagesList() {
                             return (ArrayList) analyzedPackages;
                         }
                     };
                 } else {
                     jdep = new jdepend.textui.JDepend(new PrintWriter(fw)){
+                        @Override
                         protected ArrayList getPackagesList() {
                             return (ArrayList) analyzedPackages;
                         }
@@ -1012,6 +1026,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         });
     }
 
+    @Override
     public void dispose() {
         getSite().setSelectionProvider(null);
         tooltip.dispose();
@@ -1025,18 +1040,19 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
     /**
      * Passing the focus request to the viewer's control.
      */
+    @Override
     public void setFocus() {
         viewer.getControl().setFocus();
     }
 
     /** Makes the view visible in the active perspective. If there
-      * isn't a view registered <code>null</code> is returned.
-      * Otherwise the opened view part is returned.
-      */
+     * isn't a view registered <code>null</code> is returned.
+     * Otherwise the opened view part is returned.
+     */
     public static PackageTreeView openInActivePerspective() {
         try {
             return (PackageTreeView) JDepend4EclipsePlugin.getActivePage().showView(
-                PackageTreeView.ID);
+                    PackageTreeView.ID);
         } catch (Exception pe) {
             return null;
         }
@@ -1054,9 +1070,11 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         return null;
     }
 
+    @Override
     public Object getAdapter(Class adapter) {
-        if (adapter.equals(ISelectionProvider.class))
+        if (adapter.equals(ISelectionProvider.class)) {
             return treeSelectionHandler;
+        }
         if (adapter == IShowInSource.class) {
             return this;
         }
@@ -1071,26 +1089,27 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
      * Convenience method for running an operation with progress and
      * error feedback.
      */
-   public final void runJDependJob(final IResource[] resources) {
-       Job job = new Job("JDepend analysis"){
-           protected IStatus run(IProgressMonitor monitor) {
-               try {
-                   final TreeFolder newRoot = new TreeFolder();
-                   final List packages = treeContent.analyze(newRoot, resources);
-                   PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
-                       public void run() {
-                           updateUI(newRoot, resources, packages);
-                       }
-                   });
-               } catch (Exception e) {
-                   JDepend4EclipsePlugin.handle(e);
-                   monitor.setCanceled(true);
-               }
-               return monitor.isCanceled()? Status.CANCEL_STATUS : Status.OK_STATUS;
-           }
-       };
-       job.setUser(true);
-       job.setPriority(Job.INTERACTIVE);
-       job.schedule();
-   }
+    public final void runJDependJob(final IResource[] resources) {
+        Job job = new Job("JDepend analysis"){
+            @Override
+            protected IStatus run(IProgressMonitor monitor) {
+                try {
+                    final TreeFolder newRoot = new TreeFolder();
+                    final List packages = treeContent.analyze(newRoot, resources);
+                    PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+                        public void run() {
+                            updateUI(newRoot, resources, packages);
+                        }
+                    });
+                } catch (Exception e) {
+                    JDepend4EclipsePlugin.handle(e);
+                    monitor.setCanceled(true);
+                }
+                return monitor.isCanceled()? Status.CANCEL_STATUS : Status.OK_STATUS;
+            }
+        };
+        job.setUser(true);
+        job.setPriority(Job.INTERACTIVE);
+        job.schedule();
+    }
 }

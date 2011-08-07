@@ -19,6 +19,8 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
 import jdepend.framework.ClassFileParser;
+import jdepend.framework.JDepend;
+import jdepend.framework.PackageFilter;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -39,7 +41,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 public class JDepend4EclipsePlugin extends AbstractUIPlugin implements IPropertyChangeListener {
     //The shared instance.
     private static JDepend4EclipsePlugin plugin;
-   // private static boolean useSourcesOnly = true;
+    // private static boolean useSourcesOnly = true;
     //Resource bundle.
     private ResourceBundle resourceBundle;
 
@@ -106,9 +108,9 @@ public class JDepend4EclipsePlugin extends AbstractUIPlugin implements IProperty
     }
 
     /** Call this method to retrieve the currently active Workbench page.
-      *
-      * @return the active workbench page.
-      */
+     *
+     * @return the active workbench page.
+     */
     public static IWorkbenchPage getActivePage() {
         IWorkbenchWindow window = getDefault().getWorkbench().getActiveWorkbenchWindow();
         if (window == null) {
@@ -118,9 +120,9 @@ public class JDepend4EclipsePlugin extends AbstractUIPlugin implements IProperty
     }
 
     /** Call this method to log the given status.
-      *
-      * @param status the status to log.
-      */
+     *
+     * @param status the status to log.
+     */
     private static void log(IStatus status) {
         getDefault().getLog().log(status);
     }
@@ -130,15 +132,19 @@ public class JDepend4EclipsePlugin extends AbstractUIPlugin implements IProperty
     }
 
     public static JDepend getJDependInstance() {
-        JDepend jdepend = new JDepend();
+        PackageFilter filter = new PackageFilter();
         IPreferenceStore settings = getDefault().getPreferenceStore();
         if (settings.getBoolean(JDependConstants.PREF_USE_FILTERS)) {
             String[] strings =
-                parseList(settings.getString(JDependConstants.PREF_ACTIVE_FILTERS_LIST));
-            for (int i = 0; i < strings.length; i++) {
-                jdepend.addPackageToFilter(strings[i]);
+                    parseList(settings.getString(JDependConstants.PREF_ACTIVE_FILTERS_LIST));
+            for (String name : strings) {
+                if (name.endsWith(".*")) {
+                    name = name.substring(0, name.length()-2);
+                }
+                filter.addPackage(name);
             }
         }
+        JDepend jdepend = new JDepend(filter);
         return jdepend;
     }
 
@@ -163,10 +169,10 @@ public class JDepend4EclipsePlugin extends AbstractUIPlugin implements IProperty
 
 
     /** Call this method to retrieve the (cache) ImageDescriptor for the given id.
-      *
-      * @param id the id of the image descriptor.
-      * @return the ImageDescriptor instance.
-      */
+     *
+     * @param id the id of the image descriptor.
+     * @return the ImageDescriptor instance.
+     */
     public ImageDescriptor getImageDescriptor(String id) {
         ImageDescriptor imageDescriptor = (ImageDescriptor) imageDescriptors
                 .get(id);
