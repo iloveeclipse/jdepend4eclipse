@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JDepend4Eclipse
 Bundle-SymbolicName: de.loskutov.eclipse.jdepend; singleton:=true
-Bundle-Version: 1.2.2.qualifier
+Bundle-Version: 1.2.3.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: de.loskutov.eclipse.jdepend.JDepend4EclipsePlugin
 Bundle-Vendor: Andrei Loskutov
