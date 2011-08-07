@@ -10,7 +10,6 @@ package de.loskutov.eclipse.jdepend.views;
 
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -57,9 +56,10 @@ public class JDependConsole extends MessageConsole {
 
         }
 
+        @Override
         public void run() {
             IPreferenceStore preferenceStore = JDepend4EclipsePlugin.getDefault()
-            .getPreferenceStore();
+                    .getPreferenceStore();
             boolean value = isChecked();
             preferenceStore.setValue(JDependConstants.PREF_OUTPUT_XML, value);
             showConsole(packages);
@@ -73,6 +73,7 @@ public class JDependConsole extends MessageConsole {
                     .getImageDescriptor(JDepend4EclipsePlugin.IMG_CLOSE));
         }
 
+        @Override
         public void run() {
             IConsoleManager manager = ConsolePlugin.getDefault().getConsoleManager();
             if (console != null) {
@@ -87,6 +88,7 @@ public class JDependConsole extends MessageConsole {
         super(name, imageDescriptor, autoLifecycle);
     }
 
+    @Override
     protected void dispose() {
         if (!disposed) {
             disposed = true;
@@ -134,28 +136,32 @@ public class JDependConsole extends MessageConsole {
         cons.clearConsole();
 
         Job job = new Job("JDepend text output processing"){
+            @Override
             protected IStatus run(IProgressMonitor monitor) {
                 IOConsoleOutputStream stream = cons.newMessageStream();
                 PrintWriter pw = new PrintWriter(new BufferedWriter(new PrintWriter(stream)));
                 boolean asXml = JDepend4EclipsePlugin.getDefault().getPreferenceStore()
-                .getBoolean(JDependConstants.PREF_OUTPUT_XML);
+                        .getBoolean(JDependConstants.PREF_OUTPUT_XML);
                 jdepend.textui.JDepend jdep;
                 if(asXml){
                     jdep = new jdepend.xmlui.JDepend(pw){
-                        protected ArrayList getPackagesList() {
-                            return (ArrayList) packages1;
+                        @Override
+                        protected List getPackagesList() {
+                            return packages1;
                         }
                     };
                 } else {
                     jdep = new jdepend.textui.JDepend(pw){
-                        protected ArrayList getPackagesList() {
-                            return (ArrayList) packages1;
+                        @Override
+                        protected List getPackagesList() {
+                            return packages1;
                         }
                     };
                 }
                 jdep.analyze();
                 return monitor.isCanceled()?  Status.CANCEL_STATUS : Status.OK_STATUS;
             }
+            @Override
             public boolean belongsTo(Object family) {
                 return JDependConsole.class == family;
             }
