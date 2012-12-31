@@ -1,5 +1,1 @@
-
-syntax: regexp
-.svn
-syntax: regexp
-^JDepend4Eclipse/bin$
+JDepend4Eclipse/bin
