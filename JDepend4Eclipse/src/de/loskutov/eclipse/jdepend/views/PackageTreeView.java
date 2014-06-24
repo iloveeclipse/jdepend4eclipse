@@ -123,6 +123,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             listeners = new ArrayList<ISelectionChangedListener>();
         }
 
+        @Override
         public void selectionChanged(SelectionChangedEvent event) {
             IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 
@@ -183,12 +184,14 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
             }
         }
 
+        @Override
         public void addSelectionChangedListener(ISelectionChangedListener listener) {
             if(listener != null && !listeners.contains(listener)) {
                 listeners.add(listener);
             }
         }
 
+        @Override
         public ISelection getSelection() {
             if(lastSelection == null){
                 return StructuredSelection.EMPTY;
@@ -201,13 +204,18 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                 TreeFolder folder = (TreeFolder) lastSelection;
                 selectedObj = folder.getIJavaElement();
             }
+            if(selectedObj == null){
+                return StructuredSelection.EMPTY;
+            }
             return new StructuredSelection(selectedObj);
         }
 
+        @Override
         public void removeSelectionChangedListener(ISelectionChangedListener listener) {
             listeners.remove(listener);
         }
 
+        @Override
         public void setSelection(ISelection selection) {
             // noop
         }
@@ -223,30 +231,36 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
 
     final class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 
+        @Override
         public void inputChanged(Viewer v, Object oldInput, Object newInput) {
             // ignored
         }
+        @Override
         public void dispose() {
             // ignored
         }
+        @Override
         public Object[] getElements(Object parent) {
             if (getRoot() == parent) {
                 return getChildren(getRoot());
             }
             return getChildren(parent);
         }
+        @Override
         public Object getParent(Object child) {
             if (child instanceof TreeObject) {
                 return ((TreeObject) child).getParent();
             }
             return null;
         }
+        @Override
         public Object[] getChildren(Object parent) {
             if (parent instanceof TreeFolder) {
                 return ((TreeFolder) parent).getChildren();
             }
             return new Object[0];
         }
+        @Override
         public boolean hasChildren(Object parent) {
             if (parent instanceof TreeFolder) {
                 return ((TreeFolder) parent).hasChildren();
@@ -851,6 +865,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
         menuMgr.setRemoveAllWhenShown(true);
         menuMgr.addMenuListener(new IMenuListener() {
+            @Override
             public void menuAboutToShow(IMenuManager manager) {
                 fillContextMenu(manager);
             }
@@ -1020,6 +1035,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
 
     private void hookDoubleClickAction() {
         viewer.addDoubleClickListener(new IDoubleClickListener() {
+            @Override
             public void doubleClick(DoubleClickEvent event) {
                 actionOpenJava.run();
             }
@@ -1058,6 +1074,7 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
         }
     }
 
+    @Override
     public ShowInContext getShowInContext() {
         IStructuredSelection selection = getSelection();
         if(selection.size() != 1){
@@ -1097,8 +1114,10 @@ public class PackageTreeView extends ViewPart implements IShowInSource {
                     final TreeFolder newRoot = new TreeFolder();
                     final List<JavaPackage> packages = treeContent.analyze(newRoot, resources);
                     PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+                        @Override
                         public void run() {
                             updateUI(newRoot, resources, packages);
+
                         }
                     });
                 } catch (Exception e) {

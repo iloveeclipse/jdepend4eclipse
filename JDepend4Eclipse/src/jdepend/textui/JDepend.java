@@ -1,8 +1,15 @@
 package jdepend.textui;
 
-import java.io.*;
-import java.util.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import jdepend.framework.JavaClass;
 import jdepend.framework.JavaPackage;
@@ -20,7 +27,7 @@ import jdepend.framework.PackageFilter;
 
 public class JDepend {
 
-    private jdepend.framework.JDepend analyzer;
+    private final jdepend.framework.JDepend analyzer;
 
     private PrintWriter writer;
 
@@ -320,13 +327,13 @@ public class JDepend {
         getWriter().println(
                 tab() + "Total Classes: " + jPackage.getClassCount());
         getWriter()
-                .println(
-                        tab() + "Concrete Classes: "
-                                + jPackage.getConcreteClassCount());
+        .println(
+                tab() + "Concrete Classes: "
+                        + jPackage.getConcreteClassCount());
         getWriter()
-                .println(
-                        tab() + "Abstract Classes: "
-                                + jPackage.getAbstractClassCount());
+        .println(
+                tab() + "Abstract Classes: "
+                        + jPackage.getAbstractClassCount());
         getWriter().println("");
         getWriter().println(tab() + "Ca: " + jPackage.afferentCoupling());
         getWriter().println(tab() + "Ce: " + jPackage.efferentCoupling());
@@ -425,8 +432,8 @@ public class JDepend {
                 "--------------------------------------------------\n");
 
         getWriter()
-                .println(
-                        "Name, Class Count, Abstract Class Count, Ca, Ce, A, I, D, V:\n");
+        .println(
+                "Name, Class Count, Abstract Class Count, Ca, Ce, A, I, D, V:\n");
 
         Iterator i = packages.iterator();
         while (i.hasNext()) {
@@ -472,10 +479,11 @@ public class JDepend {
 
         System.err.println("");
         System.err.println("usage: ");
-        System.err.println(baseUsage + "[-components <components>]" +
-            " [-file <output file>] <directory> " +
-            "[directory2 [directory 3] ...]");
-        System.exit(1);
+        String message2 = baseUsage + "[-components <components>]" +
+                " [-file <output file>] <directory> " +
+                "[directory2 [directory 3] ...]";
+        System.err.println(message2);
+        throw new IllegalArgumentException(message2);
     }
 
     protected void instanceMain(String[] args) {
