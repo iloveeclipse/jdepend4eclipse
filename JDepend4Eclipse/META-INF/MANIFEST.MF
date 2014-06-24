@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JDepend4Eclipse
 Bundle-SymbolicName: de.loskutov.eclipse.jdepend; singleton:=true
-Bundle-Version: 1.2.3.qualifier
+Bundle-Version: 1.2.4.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: de.loskutov.eclipse.jdepend.JDepend4EclipsePlugin
 Bundle-Vendor: Andrey Loskutov
-Require-Bundle: org.eclipse.core.runtime;bundle-version="3.5.0",
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.6.0",
  org.eclipse.core.resources,
  org.eclipse.ui,
  org.eclipse.jdt.core,
@@ -21,5 +21,5 @@ Eclipse-AutoStart: true
 Export-Package: jdepend.framework,
  jdepend.textui,
  jdepend.xmlui
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

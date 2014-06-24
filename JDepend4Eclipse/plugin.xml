@@ -24,7 +24,7 @@
             nameFilter="*"
             id="de.loskutov.eclipse.jdepend.contribution1">
          <action
-               label="Run JDepend analysis"
+               label="Run JDepend Analysis"
                class="de.loskutov.eclipse.jdepend.actions.ShowDependencyAction"
                menubarPath="additions"
                id="de.loskutov.eclipse.jdepend.ShowDependencyAction">
@@ -83,7 +83,7 @@
       <consoleFactory
             class="de.loskutov.eclipse.jdepend.views.JDependConsole$JDependConsoleFactory"
             icon="icons/packages.gif"
-            label="JDepend console"/>
+            label="JDepend Console"/>
    </extension>
    <extension
          point="org.eclipse.ui.console.consolePageParticipants">
