@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2010 Andrei Loskutov.
+ * Copyright (c) 2010 Andrey Loskutov.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Andrei Loskutov - initial API and implementation
+ * Contributor:  Andrey Loskutov - initial API and implementation
  *******************************************************************************/
 
 package de.loskutov.eclipse.jdepend.views;
@@ -131,6 +131,7 @@ public class DependencyView extends ViewPart {
     static final class ViewLabelProvider
     extends LabelProvider
     implements ITableLabelProvider {
+        @Override
         public String getColumnText(Object obj, int index) {
             if(obj instanceof String[]){
                 String [] arr = (String[]) obj;
@@ -143,6 +144,7 @@ public class DependencyView extends ViewPart {
             }
             return getText(obj);
         }
+        @Override
         public Image getColumnImage(Object obj, int index) {
             if(obj instanceof String[]){
                 String [] arr = (String[]) obj;
@@ -168,12 +170,14 @@ public class DependencyView extends ViewPart {
         JavaPackage[] elements;
         String [][] data;
 
+        @Override
         public void inputChanged(Viewer v, Object oldInput, Object newInput) {
             if(newInput!= null && newInput instanceof JavaPackage[]){
                 setElements((JavaPackage[])newInput);
             }
         }
 
+        @Override
         public void dispose() {
             // ignored
         }
@@ -192,6 +196,7 @@ public class DependencyView extends ViewPart {
             return sb.toString();
         }
 
+        @Override
         public Object[] getElements(Object parent) {
             if(elements == null) {
                 return new Object[0];

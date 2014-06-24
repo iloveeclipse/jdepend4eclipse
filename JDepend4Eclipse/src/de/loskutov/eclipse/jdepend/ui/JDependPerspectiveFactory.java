@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2010 Andrei Loskutov.
+ * Copyright (c) 2010 Andrey Loskutov.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Andrei Loskutov - initial API and implementation
+ * Contributor:  Andrey Loskutov - initial API and implementation
  *******************************************************************************/
 
 /**
@@ -36,6 +36,7 @@ public class JDependPerspectiveFactory implements IPerspectiveFactory {
     /* (non-Javadoc)
      * @see org.eclipse.ui.IPerspectiveFactory#createInitialLayout(org.eclipse.ui.IPageLayout)
      */
+    @Override
     public void createInitialLayout(IPageLayout layout) {
         String editorArea = layout.getEditorArea();
 

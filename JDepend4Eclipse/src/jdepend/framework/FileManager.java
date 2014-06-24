@@ -1,20 +1,24 @@
 package jdepend.framework;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.TreeSet;
 
 /**
- * The <code>FileManager</code> class is responsible for extracting 
- * Java class files (<code>.class</code> files) from a collection of 
+ * The <code>FileManager</code> class is responsible for extracting
+ * Java class files (<code>.class</code> files) from a collection of
  * registered directories.
- * 
+ *
  * @author <b>Mike Clark</b>
  * @author Clarkware Consulting, Inc.
  */
 
 public class FileManager {
 
-    private ArrayList directories;
+    private final ArrayList directories;
     private boolean acceptInnerClasses;
 
 
@@ -25,8 +29,8 @@ public class FileManager {
 
     /**
      * Determines whether inner classes should be collected.
-     * 
-     * @param b <code>true</code> to collect inner classes; 
+     *
+     * @param b <code>true</code> to collect inner classes;
      *          <code>false</code> otherwise.
      */
     public void acceptInnerClasses(boolean b) {
@@ -121,14 +125,14 @@ public class FileManager {
     private boolean isZip(File file) {
         return existsWithExtension(file, ".zip");
     }
- 
+
     private boolean isJar(File file) {
         return existsWithExtension(file, ".jar");
     }
 
     private boolean existsWithExtension(File file, String extension) {
         return file.isFile() &&
-            file.getName().toLowerCase().endsWith(extension);
+                file.getName().toLowerCase().endsWith(extension);
     }
 
 }

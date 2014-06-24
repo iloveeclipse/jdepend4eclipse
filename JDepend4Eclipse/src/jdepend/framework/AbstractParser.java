@@ -1,20 +1,22 @@
 package jdepend.framework;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
- * The <code>AbstractParser</code> class is the base class 
- * for classes capable of parsing files to create a 
+ * The <code>AbstractParser</code> class is the base class
+ * for classes capable of parsing files to create a
  * <code>JavaClass</code> instance.
- * 
+ *
  * @author <b>Mike Clark</b>
  * @author Clarkware Consulting, Inc.
  */
 
 public abstract class AbstractParser {
 
-    private ArrayList parseListeners;
+    private final ArrayList parseListeners;
     private PackageFilter filter;
     public static boolean DEBUG = false;
 
@@ -41,7 +43,7 @@ public abstract class AbstractParser {
     /**
      * Informs registered parser listeners that the specified
      * <code>JavaClass</code> was parsed.
-     * 
+     *
      * @param jClass Parsed Java class.
      */
     protected void onParsedJavaClass(JavaClass jClass) {

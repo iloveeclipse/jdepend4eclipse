@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2010 Andrei Loskutov.
+ * Copyright (c) 2010 Andrey Loskutov.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Andrei Loskutov - initial API and implementation
+ * Contributor:  Andrey Loskutov - initial API and implementation
  *******************************************************************************/
 
 package de.loskutov.eclipse.jdepend.actions;
@@ -37,6 +37,7 @@ public class ShowDependencyAction implements IObjectActionDelegate {
     }
 
     /** @see org.eclipse.ui.IObjectActionDelegate#setActivePart(IAction, IWorkbenchPart) */
+    @Override
     public void setActivePart(IAction action, IWorkbenchPart targetPart) {
         // noop
     }
@@ -45,6 +46,7 @@ public class ShowDependencyAction implements IObjectActionDelegate {
      *  (non-Javadoc)
      * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
      */
+    @Override
     public void run(IAction action) {
         final IResource[] resources = getSelectedResources();
         if(resources.length == 0){
@@ -71,6 +73,7 @@ public class ShowDependencyAction implements IObjectActionDelegate {
      *  (non-Javadoc)
      * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
      */
+    @Override
     public void selectionChanged(IAction action, ISelection mySelection) {
         if (mySelection instanceof IStructuredSelection) {
             this.selection = (IStructuredSelection) mySelection;

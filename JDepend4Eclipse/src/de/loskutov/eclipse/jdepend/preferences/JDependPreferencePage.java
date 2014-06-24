@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2010 Andrei Loskutov.
+ * Copyright (c) 2010 Andrey Loskutov.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Andrei Loskutov - initial API and implementation
+ * Contributor:  Andrey Loskutov - initial API and implementation
  *******************************************************************************/
 
 package de.loskutov.eclipse.jdepend.preferences;
@@ -163,6 +163,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
     /**
      * @see IWorkbenchPreferencePage#init(IWorkbench)
      */
+    @Override
     public void init(IWorkbench workbench) { /** ignored */ }
 
     /**
@@ -188,9 +189,11 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         fUseFiltersCheckbox.setLayoutData(gd);
 
         fUseFiltersCheckbox.addSelectionListener(new SelectionListener() {
+            @Override
             public void widgetSelected(SelectionEvent se) {
                 toggleFilterWidgetsEnabled(fUseFiltersCheckbox.getSelection());
             }
+            @Override
             public void widgetDefaultSelected(SelectionEvent se) {/** ignored */}
         });
 
@@ -215,9 +218,11 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         gd.horizontalSpan = 2;
         askBeforeSave.setLayoutData(gd);
         askBeforeSave.addSelectionListener(new SelectionListener() {
+            @Override
             public void widgetSelected(SelectionEvent se) {
                 saveAsXml.setEnabled(!askBeforeSave.getSelection());
             }
+            @Override
             public void widgetDefaultSelected(SelectionEvent se) {/** ignored */}
         });
 
@@ -260,12 +265,14 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         fFilterViewer.setInput(this);
 
         fFilterViewer.addCheckStateListener(new ICheckStateListener() {
+            @Override
             public void checkStateChanged(CheckStateChangedEvent event) {
                 Filter filter = (Filter) event.getElement();
                 fStepFilterContentProvider.toggleFilter(filter);
             }
         });
         fFilterViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+            @Override
             public void selectionChanged(SelectionChangedEvent event) {
                 ISelection selection = event.getSelection();
                 if (selection.isEmpty()) {
@@ -310,6 +317,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
         fAddFilterButton.setLayoutData(gd);
         fAddFilterButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 editFilter();
             }
@@ -322,6 +330,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         gd = getButtonGridData(fAddPackageButton);
         fAddPackageButton.setLayoutData(gd);
         fAddPackageButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 addPackage();
             }
@@ -334,6 +343,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         gd = getButtonGridData(fRemoveFilterButton);
         fRemoveFilterButton.setLayoutData(gd);
         fRemoveFilterButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 removeFilters();
             }
@@ -346,6 +356,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         gd = getButtonGridData(fEnableAllButton);
         fEnableAllButton.setLayoutData(gd);
         fEnableAllButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 checkAllFilters(true);
             }
@@ -357,6 +368,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         gd = getButtonGridData(fDisableAllButton);
         fDisableAllButton.setLayoutData(gd);
         fDisableAllButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 checkAllFilters(false);
             }
@@ -472,6 +484,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         // traverse away to dialog's default button.  Without this, hitting
         // CR in the text field closes the entire dialog.
         text.addListener(SWT.Traverse, new Listener() {
+            @Override
             public void handleEvent(Event event) {
                 event.doit = false;
             }
@@ -579,6 +592,7 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         final JavaModelException[] exception = new JavaModelException[1];
         ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
         IRunnableWithProgress r = new IRunnableWithProgress() {
+            @Override
             public void run(IProgressMonitor myMonitor) {
                 try {
                     Set<String> packageNameSet = new HashSet<String>();
@@ -878,12 +892,15 @@ public final class JDependPreferencePage extends PreferencePage implements IWork
         /**
          * @see IStructuredContentProvider#getElements(Object)
          */
+        @Override
         public Object[] getElements(Object inputElement) {
             return fFilters.toArray();
         }
 
+        @Override
         public void inputChanged(Viewer viewer, Object oldInput, Object newInput) { /** ignored */ }
 
+        @Override
         public void dispose() {/** ignored */}
     }
 
@@ -946,6 +963,7 @@ class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
     /**
      * @see ITableLabelProvider#getColumnText(Object, int)
      */
+    @Override
     public String getColumnText(Object object, int column) {
         if (column == 0) {
             return ((Filter) object).getName();
@@ -964,6 +982,7 @@ class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
     /**
      * @see ITableLabelProvider#getColumnImage(Object, int)
      */
+    @Override
     public Image getColumnImage(Object object, int column) {
         return IMG_PKG;
     }

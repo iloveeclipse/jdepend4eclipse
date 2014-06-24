@@ -1,8 +1,8 @@
 package jdepend.framework;
 
-import java.util.*;
-
-import jdepend.framework.JavaPackage;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * The <code>DependencyConstraint</code> class is a constraint that tests
@@ -13,39 +13,39 @@ import jdepend.framework.JavaPackage;
  * packages only depend upon the 'util' package, and no others:
  * <p>
  * <blockquote>
- * 
+ *
  * <pre>
- * 
+ *
  * public void testDependencyConstraint() {
- * 
+ *
  *     JDepend jdepend = new JDepend();
  *     jdepend.addDirectory(&quot;/path/to/classes&quot;);
  *     Collection analyzedPackages = jdepend.analyze();
- * 
+ *
  *     DependencyConstraint constraint = new DependencyConstraint();
- * 
+ *
  *     JavaPackage ejb = constraint.addPackage(&quot;com.xyz.ejb&quot;);
  *     JavaPackage web = constraint.addPackage(&quot;com.xyz.web&quot;);
  *     JavaPackage util = constraint.addPackage(&quot;com.xyz.util&quot;);
- * 
+ *
  *     ejb.dependsUpon(util);
  *     web.dependsUpon(util);
- * 
+ *
  *     assertEquals(&quot;Dependency mismatch&quot;, true, constraint
  *             .match(analyzedPackages));
  * }
  * </pre>
- * 
+ *
  * </blockquote>
  * </p>
- * 
- * @author <b>Mike Clark</b> 
+ *
+ * @author <b>Mike Clark</b>
  * @author Clarkware Consulting, Inc.
  */
 
 public class DependencyConstraint {
 
-    private HashMap packages;
+    private final HashMap packages;
 
     public DependencyConstraint() {
         packages = new HashMap();
@@ -71,15 +71,15 @@ public class DependencyConstraint {
     }
 
     /**
-     * Indicates whether the specified packages match the 
+     * Indicates whether the specified packages match the
      * packages in this constraint.
-     * 
+     *
      * @return <code>true</code> if the packages match this constraint
      */
     public boolean match(Collection expectedPackages) {
 
         if (packages.size() == expectedPackages.size()) {
-            
+
             for (Iterator i = expectedPackages.iterator(); i.hasNext();) {
                 Object next = i.next();
                 if (next instanceof JavaPackage) {

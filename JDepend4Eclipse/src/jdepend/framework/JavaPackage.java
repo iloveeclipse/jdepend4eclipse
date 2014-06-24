@@ -1,19 +1,23 @@
 package jdepend.framework;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The <code>JavaPackage</code> class represents a Java package.
- * 
+ *
  * @author <b>Mike Clark</b>
  * @author Clarkware Consulting, Inc.
  */
 
 public class JavaPackage {
 
-    private String name;
+    private final String name;
     private int volatility;
-    private HashSet classes;
+    private final HashSet classes;
     private List afferents;
     private List efferents;
 
@@ -55,7 +59,7 @@ public class JavaPackage {
     /**
      * Collects the packages participating in the first package dependency cycle
      * detected which originates from this package.
-     * 
+     *
      * @param list Collecting object to be populated with the list of
      *            JavaPackage instances in a cycle.
      * @return <code>true</code> if a cycle exist; <code>false</code>
@@ -88,7 +92,7 @@ public class JavaPackage {
      * <p>
      * This is a more exhaustive search than that employed by
      * <code>collectCycle</code>.
-     * 
+     *
      * @param list Collecting object to be populated with the list of
      *            JavaPackage instances in a cycle.
      * @return <code>true</code> if a cycle exist; <code>false</code>
@@ -114,7 +118,7 @@ public class JavaPackage {
         if (containsCycle) {
             return true;
         }
-        
+
         list.remove(this);
         return false;
     }
@@ -158,9 +162,9 @@ public class JavaPackage {
     }
 
     /**
-     * Adds the specified Java package as an efferent of this package 
+     * Adds the specified Java package as an efferent of this package
      * and adds this package as an afferent of it.
-     * 
+     *
      * @param imported Java package.
      */
     public void dependsUpon(JavaPackage imported) {
@@ -170,7 +174,7 @@ public class JavaPackage {
 
     /**
      * Adds the specified Java package as an afferent of this package.
-     * 
+     *
      * @param jPackage Java package.
      */
     public void addAfferent(JavaPackage jPackage) {
@@ -254,6 +258,7 @@ public class JavaPackage {
         return d * volatility;
     }
 
+    @Override
     public boolean equals(Object other) {
         if (other instanceof JavaPackage) {
             JavaPackage otherPackage = (JavaPackage) other;
@@ -262,11 +267,13 @@ public class JavaPackage {
         return false;
     }
 
+    @Override
     public int hashCode() {
         return getName().hashCode();
     }
-    
+
+    @Override
     public String toString() {
-    	return name;
+        return name;
     }
 }

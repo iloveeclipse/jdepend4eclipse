@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2010 Andrei Loskutov.
+ * Copyright (c) 2010 Andrey Loskutov.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Andrei Loskutov - initial API and implementation
+ * Contributor:  Andrey Loskutov - initial API and implementation
  *******************************************************************************/
 
 package de.loskutov.eclipse.jdepend;
@@ -101,6 +101,7 @@ public class JDepend4EclipsePlugin extends AbstractUIPlugin implements IProperty
     /**
      * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(PropertyChangeEvent)
      */
+    @Override
     public void propertyChange(PropertyChangeEvent event) {
         /*if (event.getProperty().equals(JDependConstants.PREF_USE_SOURCES_ONLY)){
             useSourcesOnly = event.getNewValue().equals(Boolean.TRUE);

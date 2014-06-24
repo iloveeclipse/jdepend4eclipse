@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2010 Andrei Loskutov.
+ * Copyright (c) 2010 Andrey Loskutov.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Andrei Loskutov - initial API and implementation
+ * Contributor:  Andrey Loskutov - initial API and implementation
  *******************************************************************************/
 package de.loskutov.eclipse.jdepend.views;
 
@@ -37,7 +37,7 @@ import de.loskutov.eclipse.jdepend.JDepend4EclipsePlugin;
 import de.loskutov.eclipse.jdepend.JDependConstants;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class JDependConsole extends MessageConsole {
 
@@ -101,6 +101,7 @@ public class JDependConsole extends MessageConsole {
 
     public static class JDependConsoleFactory implements IConsoleFactory {
 
+        @Override
         public void openConsole() {
             showConsole();
         }
@@ -178,14 +179,17 @@ public class JDependConsole extends MessageConsole {
 
         private ToggleXmlAction xmlAction;
 
+        @Override
         public void activated() {
             // noop
         }
 
+        @Override
         public void deactivated() {
             // noop
         }
 
+        @Override
         public void dispose() {
             removeAction = null;
             xmlAction = null;
@@ -196,6 +200,7 @@ public class JDependConsole extends MessageConsole {
             //            }
         }
 
+        @Override
         public void init(IPageBookViewPage page, IConsole console1) {
             removeAction = new RemoveAction();
             xmlAction = new ToggleXmlAction();
@@ -206,6 +211,7 @@ public class JDependConsole extends MessageConsole {
                     xmlAction);
         }
 
+        @Override
         public Object getAdapter(Class adapter) {
             return null;
         }
