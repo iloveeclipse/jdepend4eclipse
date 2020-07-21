@@ -69,16 +69,6 @@
       </view>
    </extension>
    <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="doc/toc.xml"
-            primary="true"/>
-   </extension>
-   <extension
-         point="org.eclipse.help.contexts">
-      <contexts file="doc/contexts_JDepend4Eclipse.xml"/>
-   </extension>
-   <extension
          point="org.eclipse.ui.console.consoleFactories">
       <consoleFactory
             class="de.loskutov.eclipse.jdepend.views.JDependConsole$JDependConsoleFactory"

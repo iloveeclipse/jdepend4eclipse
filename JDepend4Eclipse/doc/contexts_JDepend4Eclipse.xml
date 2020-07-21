@@ -1,7 +1,0 @@
-<contexts>
-  <context  id="jdepend">
-    <description>Available help topics:</description>
-    <topic href="about.html"  label="JDepend4Eclipse Plugin Help"/>
-    <topic href="doc/JDepend.html"  label="JDepend Reference"/>
-  </context>
-</contexts>
